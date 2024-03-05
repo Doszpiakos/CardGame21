@@ -1,0 +1,135 @@
+﻿<Window x:Class="CardGame21.View.Game"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CardGame21.View"
+        mc:Ignorable="d"
+        Title="Game"
+        Height="450"
+        Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <ListView   x:Name="dealerView"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    ItemsSource="{Binding Dealers}"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    ScrollViewer.CanContentScroll="False">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Vertical"
+                                    Grid.Column="0"
+                                    Background="CornflowerBlue">
+                            <Label Content="{Binding Name}"
+                                   Foreground="AliceBlue" />
+                            <Label Content="{Binding Total}"
+                                   Foreground="AliceBlue" />
+                        </StackPanel>
+                        <ListView Grid.Row="0"
+                                  Grid.Column="1"
+                                  Margin="0"
+                                  ItemsSource="{Binding DealerHand}">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical"
+                                                Background="{Binding Color}">
+                                        <Label Content="{Binding Value}"
+                                               Foreground="AliceBlue" />
+                                        <Label Content="{Binding Suit}"
+                                               Foreground="AliceBlue" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ListView   x:Name="playersView"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    ItemsSource="{Binding PlayersList}"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    ScrollViewer.CanContentScroll="False">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Vertical"
+                                    Grid.Column="0"
+                                    Background="CornflowerBlue">
+                            <Label Content="{Binding Name}"
+                                   Foreground="AliceBlue" />
+                            <Label Content="{Binding Total}"
+                                   Foreground="AliceBlue" />
+                        </StackPanel>
+                        <ListView Grid.Row="1"
+                                  Grid.Column="1"
+                                  Margin="0"
+                                  ItemsSource="{Binding Cards}">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical"
+                                                Background="{Binding Color}">
+                                        <Label Content="{Binding Value}"
+                                               Foreground="AliceBlue" />
+                                        <Label Content="{Binding Suit}"
+                                               Foreground="AliceBlue" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Label Content="{Binding CurrentPlayer.Name}"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Background="CornflowerBlue"
+               Foreground="AliceBlue"
+               Grid.Row="3"
+               Grid.Column="0" />
+        <Button Content="HIT"
+                Command="{Binding HitCommand}"
+                Grid.Row="3"
+                Grid.Column="1" />
+        <Button Content="STAND"
+                Command="{Binding StandCommand}"
+                Grid.Row="3"
+                Grid.Column="2" />
+    </Grid>
+</Window>
