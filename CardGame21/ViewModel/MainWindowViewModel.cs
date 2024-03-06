@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace CardGame21.ViewModel
@@ -23,6 +24,17 @@ namespace CardGame21.ViewModel
         public ICommand ExitCommand { get; set; }
 
         public MainWindow main;
+
+        string playerInput;
+        public string PlayerInput
+        {
+            get { return playerInput; }
+            set
+            {
+                playerInput = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PlayerInput"));
+            }
+        }
 
         ObservableCollection<Player> playersList;
 
@@ -44,6 +56,7 @@ namespace CardGame21.ViewModel
 
         public MainWindowViewModel()
         {
+            PlayerInput = "NewPlayer";
             playersList = new ObservableCollection<Player>();
             NewGameCommand = new RelayCommand(() => 
             {
@@ -54,7 +67,7 @@ namespace CardGame21.ViewModel
             });
             AddPlayerCommand = new RelayCommand(() =>
             {
-                playersList.Add(new Player("Test"));
+                Options.Players.Add(new Player(PlayerInput));
             });
 
             ExitCommand = new RelayCommand(() =>

@@ -25,11 +25,27 @@
                     Command="{Binding NewGameCommand}"
                     Foreground="Yellow"
                     FontSize="25" />
-            <Button Content="Add player"
-                    Margin="150,20,150,20"
-                    Command="{Binding AddPlayerCommand}"
-                    Foreground="Yellow"
-                    FontSize="25" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBox Name="TextBox"
+                         Text="{Binding PlayerInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Margin="120,0,0,0"
+                         Background="Gray"
+                         FontSize="25"
+                         Padding="10"
+                         Foreground="Yellow" />
+                <Button Grid.Column="1"
+                        Content="Add player"
+                        Margin="60,20,170,20"
+                        Command="{Binding AddPlayerCommand}"
+                        Foreground="Yellow"
+                        FontSize="25" />
+            </Grid>
             <Button Content="Exit"
                     Margin="150,20,150,20"
                     Command="{Binding ExitCommand}"
