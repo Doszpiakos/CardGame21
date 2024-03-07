@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ using System.Windows.Navigation;
 
 namespace CardGame21.ViewModel
 {
-    public class NewGameViewModel : INotifyCollectionChanged
+    public class NewGameViewModel : INotifyPropertyChanged
     {
         ObservableCollection<Player> players = new ObservableCollection<Player>();
 
@@ -29,15 +30,13 @@ namespace CardGame21.ViewModel
             set
             {
                 numOfDecks = value;
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, NumOfDecks));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NumOfDecks"));
             }
         }
 
-        public event NotifyCollectionChangedEventHandler? CollectionChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public NewGameWindow Window;
-
-        CardLogic cardLogic;
 
         public ICommand StartGameCommand { get; set; }
         public ICommand BackCommand { get; set; }
@@ -71,7 +70,7 @@ namespace CardGame21.ViewModel
             BackCommand = new RelayCommand(() =>
             {
                 main.Show();
-                Window.Close();
+                Window.Hide();
             });
         }
     }

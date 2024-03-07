@@ -101,6 +101,7 @@ namespace CardGame21.Model
         {
             Deck = deck;
             DealerHand = new ObservableCollection<Card>();
+            Name = "Dealer";
         }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;

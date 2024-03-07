@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:CardGame21"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

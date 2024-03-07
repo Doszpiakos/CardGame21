@@ -36,14 +36,12 @@ namespace CardGame21.ViewModel
             }
         }
 
-        ObservableCollection<Player> playersList;
-
         public ObservableCollection<Player> PlayersList
         {
-            get => playersList;
+            get => Options.Players;
             set
             {
-                playersList = value;
+                Options.Players = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PayersList"));
             }
         }
@@ -56,8 +54,8 @@ namespace CardGame21.ViewModel
 
         public MainWindowViewModel()
         {
+            Options.Players = new ObservableCollection<Player>();
             PlayerInput = "NewPlayer";
-            playersList = new ObservableCollection<Player>();
             NewGameCommand = new RelayCommand(() => 
             {
                 newGameViewModel = new NewGameViewModel(main);

@@ -77,7 +77,7 @@ namespace CardGame21.Model
             {
                 if (FaceUp)
                     return color;
-                return "White";
+                return "Tan";
             }
             set
             {

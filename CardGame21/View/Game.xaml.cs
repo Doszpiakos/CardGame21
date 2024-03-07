@@ -26,7 +26,11 @@ namespace CardGame21.View
             InitializeComponent();
             this.DataContext = gameViewModel;
             gameViewModel.Window = this;
-            ;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }

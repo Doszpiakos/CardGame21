@@ -27,5 +27,10 @@ namespace CardGame21.View
             this.DataContext = newGameViewModel;
             newGameViewModel.Window = this;
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
     }
 }

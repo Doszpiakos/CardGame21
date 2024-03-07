@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace CardGame21.ViewModel
 {
@@ -73,7 +74,7 @@ namespace CardGame21.ViewModel
         void NextPlayer()
         {
             int i = 0;
-            while (i < playersList.Count && playersList[i].Total != 21)
+            while (i < playersList.Count && playersList[i].Total >= 21)
             {
                 i++;
             }
@@ -86,6 +87,7 @@ namespace CardGame21.ViewModel
         void GameEnd()
         {
             MessageBox.Show("GAME_ENDED");
+            ClearPlayers();
             Window.Hide();
             previousWindow.Show();
         }
@@ -131,42 +133,69 @@ namespace CardGame21.ViewModel
                 }
                 else
                 {
-                    Dealers[0].RevealCard();
-
-                    while (Dealers[0].Total < 17)
-                    {
-                        Dealers[0].AddACard(cardLogic.DrawCard(true));
-                    }
-
-                    if (Dealers[0].Total > 21)
-                    {
-                        MessageBox.Show("Dealer busted!");
-                    }
-                    else
-                    {
-                        foreach (var player in playersList)
-                        {
-                            if (Dealers[0].Total < player.Total)
-                                MessageBox.Show(player.Name + " has won!");
-                            else
-                                MessageBox.Show(player.Name + " has lost!");
-                        }
-                    }
-                    GameEnd();
+                    DealerTurn();
                 }
             });
 
-            playersList = new ObservableCollection<Player>();
+            playersList = Options.Players;
             dealers = new ObservableCollection<Dealer>();
+        }
+
+        private static void AllowUIToUpdate()
+        {
+            DispatcherFrame frame = new();
+            // DispatcherPriority set to Input, the highest priority
+            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Input, new DispatcherOperationCallback(delegate (object parameter)
+            {
+                frame.Continue = false;
+                Thread.Sleep(200); // Stop all processes to make sure the UI update is perform
+                return null;
+            }), null);
+            Dispatcher.PushFrame(frame);
+            // DispatcherPriority set to Input, the highest priority
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Input, new Action(delegate { }));
+        }
+
+        void DealerTurn()
+        {
+            Dealers[0].RevealCard();
+
+            AllowUIToUpdate();
+
+            while (Dealers[0].Total < 17)
+            {
+                Dealers[0].AddACard(cardLogic.DrawCard(true));
+                AllowUIToUpdate();
+            }
+
+            if (Dealers[0].Total > 21)
+            {
+                MessageBox.Show("Dealer busted!");
+            }
+            else
+            {
+                foreach (var player in playersList)
+                {
+                    if (Dealers[0].Total < player.Total)
+                        MessageBox.Show(player.Name + " has won!");
+                    else
+                        MessageBox.Show(player.Name + " has lost!");
+                }
+            }
+            GameEnd();
+        }
+
+        void ClearPlayers()
+        {
+            foreach (var player in Options.Players)
+            {
+                player.Cards = new ObservableCollection<Card>();
+            }
         }
 
         public void FirstDraw()
         {
-            playersList.Add(new Player("John"));
-            playersList.Add(new Player("TESTER"));
-
             Dealers.Add(new Dealer(cardLogic.Cards));
-
             CurrentPlayer = playersList[0];
 
             foreach (var player in playersList)
@@ -185,12 +214,6 @@ namespace CardGame21.ViewModel
 
             Dealers[0].AddACard(cardLogic.DrawCard(false));
 
-
-            if (playersList[0].Total > 21)
-                playersList[0].Calc();
-            if (playersList[1].Total > 21)
-                playersList[1].Calc();
-
             foreach (var player in playersList)
             {
                 if (player.Total == 21)
@@ -206,13 +229,6 @@ namespace CardGame21.ViewModel
 
             if (CurrentPlayer == null)
                 GameEnd();
-
-            /* DRAW CARD TESTING
-            for (int i = 0; i < 44; i++)
-            {
-                cardLogic.DrawCard(true);
-            }
-            */
         }
     }
 }
