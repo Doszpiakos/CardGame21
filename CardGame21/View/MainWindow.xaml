@@ -6,9 +6,15 @@
         xmlns:local="clr-namespace:CardGame21"
         xmlns:vm="clr-namespace:CardGame21.ViewModel"
         mc:Ignorable="d"
+        d:DesignHeight="400"
+        d:DesignWidth="600"
+        MinWidth="600"
+        MinHeight="400"
         Title="MainWindow"
-        Height="450"
-        Width="800"
+        Height="{Binding Height, Mode=TwoWay}"
+        Width="{Binding Width, Mode=TwoWay}"
+        Left="{Binding Left, Mode=TwoWay}"
+        Top="{Binding Top, Mode=TwoWay}"
         Closing="Window_Closing">
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -28,21 +34,25 @@
                     FontSize="25" />
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <TextBox Name="TextBox"
+                         GotFocus="TextBox_GotFocus"
+                         Grid.Column="1"
                          Text="{Binding PlayerInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"
-                         Margin="120,0,0,0"
                          Background="Gray"
                          FontSize="25"
+                         Margin="5"
                          Padding="10"
                          Foreground="Yellow" />
-                <Button Grid.Column="1"
+                <Button Grid.Column="2"
                         Content="Add player"
-                        Margin="60,20,170,20"
+                        Margin="5"
                         Command="{Binding AddPlayerCommand}"
                         Foreground="Yellow"
                         FontSize="25" />

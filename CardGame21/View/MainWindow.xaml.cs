@@ -33,5 +33,10 @@ namespace CardGame21.View
         {
             System.Windows.Application.Current.Shutdown();
         }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox.Text = "";
+        }
     }
 }

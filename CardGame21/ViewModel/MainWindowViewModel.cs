@@ -19,6 +19,51 @@ namespace CardGame21.ViewModel
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        public static double Left 
+        {
+            get 
+            {
+                return Options.Left;
+            }
+            set 
+            {
+                Options.Left = value;
+            }
+        }
+        public static double Top
+        {
+            get
+            {
+                return Options.Top;
+            }
+            set
+            {
+                Options.Top = value;
+            }
+        }
+        public static double Height
+        {
+            get
+            {
+                return Options.Height;
+            }
+            set
+            {
+                Options.Height = value;
+            }
+        }
+        public static double Width
+        {
+            get
+            {
+                return Options.Width;
+            }
+            set
+            {
+                Options.Width = value;
+            }
+        }
+
         public ICommand NewGameCommand { get; set; }
         public ICommand AddPlayerCommand { get; set; }
         public ICommand ExitCommand { get; set; }
@@ -47,7 +92,6 @@ namespace CardGame21.ViewModel
         }
 
         NewGameViewModel newGameViewModel;
-        GameLogic gameLogic;
         NewGameWindow newGame;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -55,13 +99,22 @@ namespace CardGame21.ViewModel
         public MainWindowViewModel()
         {
             Options.Players = new ObservableCollection<Player>();
+            Left = Options.Left;
+            Top = Options.Top;
+            Height = Options.Height;
+            Width = Options.Width;
             PlayerInput = "NewPlayer";
             NewGameCommand = new RelayCommand(() => 
             {
-                newGameViewModel = new NewGameViewModel(main);
-                newGame = new NewGameWindow(newGameViewModel);
-                newGame.Show();
-                main.Hide();
+                if (PlayersList.Count > 0)
+                {
+                    newGameViewModel = new NewGameViewModel(main);
+                    newGame = new NewGameWindow(newGameViewModel);
+                    newGame.Show();
+                    main.Hide();
+                }
+                else
+                    MessageBox.Show("No players!");
             });
             AddPlayerCommand = new RelayCommand(() =>
             {

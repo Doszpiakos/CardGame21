@@ -5,9 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CardGame21.View"
         mc:Ignorable="d"
+        d:DesignHeight="400"
+        d:DesignWidth="600"
+        MinWidth="600"
+        MinHeight="400"
         Title="Game"
-        Height="450"
-        Width="800"
+        Height="{Binding Height, Mode=TwoWay}"
+        Width="{Binding Width, Mode=TwoWay}"
+        Left="{Binding Left, Mode=TwoWay}"
+        Top="{Binding Top, Mode=TwoWay}"
         Background="LemonChiffon"
         Closing="Window_Closing">
     <Grid>

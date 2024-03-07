@@ -19,9 +19,59 @@ namespace CardGame21.ViewModel
 {
     public class GameViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public ICommand HitCommand { get; set; }
+        public ICommand StandCommand { get; set; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
         public Game Window;
+        CardLogic cardLogic;
+        NewGameWindow previousWindow;
+        int counter = 0;
+
+        public static double Left
+        {
+            get
+            {
+                return Options.Left;
+            }
+            set
+            {
+                Options.Left = value;
+            }
+        }
+        public static double Top
+        {
+            get
+            {
+                return Options.Top;
+            }
+            set
+            {
+                Options.Top = value;
+            }
+        }
+        public static double Height
+        {
+            get
+            {
+                return Options.Height;
+            }
+            set
+            {
+                Options.Height = value;
+            }
+        }
+        public static double Width
+        {
+            get
+            {
+                return Options.Width;
+            }
+            set
+            {
+                Options.Width = value;
+            }
+        }
 
         Player currentPlayer;
         public Player CurrentPlayer
@@ -61,27 +111,31 @@ namespace CardGame21.ViewModel
             }
         }
 
-        int counter = 0;
-
-        CardLogic cardLogic;
-        GameLogic gameLogic;
-
-        NewGameWindow previousWindow;
-
-        public ICommand HitCommand { get; set; }
-        public ICommand StandCommand { get; set; }
-
         void NextPlayer()
         {
-            int i = 0;
+            int i = counter;
             while (i < playersList.Count && playersList[i].Total >= 21)
             {
                 i++;
             }
             if (i < playersList.Count)
+            {
                 CurrentPlayer = playersList[i];
+                counter = i;
+            }
             else
                 CurrentPlayer = null;
+        }
+
+        void CheckOver()
+        {
+            int i = 0;
+            while (i < playersList.Count && playersList[i].Total >= 21)
+                i++;
+            if (i < playersList.Count)
+                DealerTurn();
+            else
+                GameEnd();
         }
 
         void GameEnd()
@@ -89,13 +143,17 @@ namespace CardGame21.ViewModel
             MessageBox.Show("GAME_ENDED");
             ClearPlayers();
             Window.Hide();
+            previousWindow.Left = Options.Left;
+            previousWindow.Top = Options.Top;
+            previousWindow.Height = Options.Height;
+            previousWindow.Width = Options.Width;
             previousWindow.Show();
         }
 
-        public GameViewModel(NewGameWindow previousWindow, CardLogic cardLogic)
+        public GameViewModel(NewGameWindow previousWindow)
         {
             this.previousWindow = previousWindow;
-            this.cardLogic = cardLogic;
+            this.cardLogic = Options.CardLogic;
 
             HitCommand = new RelayCommand(() =>
             {
@@ -110,7 +168,7 @@ namespace CardGame21.ViewModel
                     if (counter < playersList.Count)
                         CurrentPlayer = playersList[counter];
                     else
-                        GameEnd();
+                        CheckOver();
                 }
                 else if (playersList[counter].Total == 21)
                 {
@@ -120,18 +178,15 @@ namespace CardGame21.ViewModel
                     if (counter < playersList.Count)
                         CurrentPlayer = playersList[counter];
                     else
-                        GameEnd();
+                        CheckOver();
                 }
             });
 
             StandCommand = new RelayCommand(() =>
             {
-                if (counter < playersList.Count - 1)
-                {
-                    counter++;
-                    CurrentPlayer = playersList[counter];
-                }
-                else
+                counter++;
+                NextPlayer();
+                if (CurrentPlayer == null)
                 {
                     DealerTurn();
                 }
@@ -195,24 +250,31 @@ namespace CardGame21.ViewModel
 
         public void FirstDraw()
         {
-            Dealers.Add(new Dealer(cardLogic.Cards));
             CurrentPlayer = playersList[0];
+            AllowUIToUpdate();
+            Dealers.Add(new Dealer(cardLogic.Cards));
+            AllowUIToUpdate();
 
             foreach (var player in playersList)
             {
+                AllowUIToUpdate();
                 player.AddACard(cardLogic.DrawCard(true));
+                AllowUIToUpdate();
                 playersList[counter].Calc();
             }
 
             Dealers[0].AddACard(cardLogic.DrawCard(true));
-            
+
             foreach (var player in playersList)
             {
+                AllowUIToUpdate();
                 player.AddACard(cardLogic.DrawCard(true));
+                AllowUIToUpdate();
                 playersList[counter].Calc();
             }
 
             Dealers[0].AddACard(cardLogic.DrawCard(false));
+            AllowUIToUpdate();
 
             foreach (var player in playersList)
             {
