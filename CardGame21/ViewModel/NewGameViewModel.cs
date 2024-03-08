@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
@@ -62,6 +63,19 @@ namespace CardGame21.ViewModel
                 Options.Width = value;
             }
         }
+        Player currentPlayer;
+        public Player CurrentPlayer
+        {
+            get
+            {
+                return currentPlayer;
+            }
+            set
+            {
+                currentPlayer = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentPlayer"));
+            }
+        }
 
         ObservableCollection<Player> players = new ObservableCollection<Player>();
 
@@ -80,6 +94,33 @@ namespace CardGame21.ViewModel
             }
         }
 
+        int bet = 2;
+        public int Bet
+        {
+            get
+            {
+                return bet;
+            }
+            set
+            {
+                if (CurrentPlayer != null)
+                {
+                    if (value > CurrentPlayer.Money)
+                        bet = CurrentPlayer.Money;
+                    if (value < 1)
+                        bet = 1;
+                    else if (value > 500)
+                        bet = 500;
+                    else
+                        bet = value;
+                }
+                else
+                    bet = 0;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Bet"));
+            }
+        }
+        int counter = 0;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public NewGameWindow Window;
@@ -88,17 +129,51 @@ namespace CardGame21.ViewModel
         public ICommand BackCommand { get; set; }
         public ICommand PlusCommand { get; set; }
         public ICommand MinusCommand { get; set; }
+        public ICommand BetCommand { get; set; }
+
+        public void Reset()
+        {
+            counter = 0;
+            int i = 0;
+            while (i < Options.Players.Count && Options.Players[i].Money < 1)
+            {
+                counter++;
+                i++;
+            }
+            if (i < Options.Players.Count)
+                CurrentPlayer = Options.Players[i];
+        }
         public NewGameViewModel(MainWindow main)
         {
+            CurrentPlayer = Options.Players[counter];
+
             StartGameCommand = new RelayCommand(() =>
             {
-                if (Options.CardLogic == null)
-                    Options.CardLogic = new CardLogic(numOfDecks);
-                GameViewModel gameViewModel = new GameViewModel(Window);
-                Game game = new Game(gameViewModel);
-                game.Show();
-                Window.Hide();
-                gameViewModel.FirstDraw();
+                if (CurrentPlayer == null)
+                {
+                    if (Options.CardLogic == null)
+                        Options.CardLogic = new CardLogic(numOfDecks);
+                    GameViewModel gameViewModel = new GameViewModel(Window);
+                    Game game = new Game(gameViewModel);
+                    game.Show();
+                    Window.Hide();
+                    counter = 0;
+                    gameViewModel.FirstDraw();
+                }
+                else
+                    MessageBox.Show("Place your bets!");
+            });
+            BetCommand = new RelayCommand(() =>
+            {
+                if (counter < Options.Players.Count)
+                {
+                    CurrentPlayer.Money = CurrentPlayer.Money - bet;
+                    counter++;
+                }
+                if (counter < Options.Players.Count)
+                    CurrentPlayer = Options.Players[counter];
+                else
+                    CurrentPlayer = null;
             });
 
             PlusCommand = new RelayCommand(() =>

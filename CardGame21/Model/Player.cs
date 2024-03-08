@@ -91,10 +91,39 @@ namespace CardGame21.Model
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, Cards));
             }
         }
+        int bet;
+        public int Bet
+        {
+            get
+            {
+                return bet;
+            }
+            set
+            {
+                bet = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Bet"));
+            }
+        }
+
+        int money;
+        public int Money
+        {
+            get
+            {
+                return money;
+            }
+            set
+            {
+                money = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Money"));
+            }
+        }
+
         public Player(string name)
         {
             Name = name;
             Cards = new ObservableCollection<Card>();
+            Money = 1000;
         }
 
         public void AddACard(Card card)

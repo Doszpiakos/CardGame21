@@ -21,11 +21,18 @@ namespace CardGame21.View
     /// </summary>
     public partial class NewGameWindow : Window
     {
+        NewGameViewModel newGameViewModel;
         public NewGameWindow(NewGameViewModel newGameViewModel)
         {
             InitializeComponent();
-            this.DataContext = newGameViewModel;
+            this.newGameViewModel = newGameViewModel;
+            this.DataContext = this.newGameViewModel;
             newGameViewModel.Window = this;
+        }
+
+        public void ReCalc()
+        {
+            newGameViewModel.Reset();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -147,6 +147,7 @@ namespace CardGame21.ViewModel
             previousWindow.Top = Options.Top;
             previousWindow.Height = Options.Height;
             previousWindow.Width = Options.Width;
+            previousWindow.ReCalc();
             previousWindow.Show();
         }
 
