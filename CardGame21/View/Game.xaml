@@ -103,7 +103,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    ItemsSource="{Binding PlayersList}"
+                    ItemsSource="{Binding Players}"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     ScrollViewer.CanContentScroll="False">
             <ListView.ItemTemplate>

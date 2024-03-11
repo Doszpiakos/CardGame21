@@ -84,6 +84,20 @@ namespace CardGame21.Model
             }
         }
 
+        bool dealOver;
+        public bool DealOver
+        {
+            get
+            {
+                return dealOver;
+            }
+
+            set
+            {
+                dealOver = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DealOver"));
+            }
+        }
         public void RevealCard()
         {
             DealerHand[1].FaceUp = true;

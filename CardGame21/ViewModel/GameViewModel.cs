@@ -29,7 +29,6 @@ namespace CardGame21.ViewModel
         public Game Window;
         CardLogic cardLogic;
         NewGameWindow previousWindow;
-        int counter = 0;
 
         public static double Left
         {
@@ -102,15 +101,15 @@ namespace CardGame21.ViewModel
             }
         }
 
-        ObservableCollection<Player> playersList;
+        ObservableCollection<Player> players;
 
-        public ObservableCollection<Player> PlayersList
+        public ObservableCollection<Player> Players
         {
-            get => playersList;
+            get => players;
             set
             {
-                playersList = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PayersList"));
+                players = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Players"));
             }
         }
 
@@ -126,51 +125,106 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Chooses next player, starts dealers turn
         void NextPlayer()
         {
-            int i = counter;
-            while (i < playersList.Count && playersList[i].Total >= 21)
-            {
-                i++;
-            }
-            if (i < playersList.Count)
+            if (CurrentPlayer != null)
             {
                 CurrentPlayer.Color = "CornflowerBlue";
-                CurrentPlayer = playersList[i];
-                counter = i;
-                Info.Add(new Info(CurrentPlayer.Name + "'s turn", Model.Info.MessageColors.Turn));
-                CurrentPlayer.Color = "Navy";
+                int i = 0;
+                while (i < Options.Players.Count && CurrentPlayer != Options.Players[i])
+                    i++;
+                i++;
+                if (i < Options.Players.Count)
+                {
+                    while (i < Options.Players.Count && Options.Players[i].Won)
+                        i++;
+                    CurrentPlayer = Options.Players[i];
+                    Info.Add(new Info(CurrentPlayer.Name + "'s turn", Model.Info.MessageColors.Turn));
+                    CurrentPlayer.Color = "Navy";
+                }
+                else
+                {
+                    CurrentPlayer = null;
+                    DealerTurn();
+                }
+            }
+        }
+
+        void CheckPlayer()
+        {
+            if (Dealers[0].DealOver)
+            {
+                int total = 0;
+
+                if (Dealers[0].Total < 22)
+                    total = Dealers[0].Total;
+
+                foreach (var player in Options.Players)
+                {
+                    if (!player.CheckedStatus)
+                    {
+                        if (player.Total < 22 && player.Total > total)
+                        {
+                            player.Won = true;
+                            player.CheckedStatus = true;
+                            MessageBox.Show(player.Name + " has won!");
+                            Info.Add(new Info(player.Name + " has won!", Model.Info.MessageColors.Won));
+                        }
+                        else
+                        {
+                            player.CheckedStatus = true;
+                            MessageBox.Show(player.Name + " has busted!");
+                            Info.Add(new Info(player.Name + " has busted!", Model.Info.MessageColors.Bust));
+                        }
+                    }
+                }
             }
             else
-                CurrentPlayer = null;
+            {
+                if (CurrentPlayer.Total > 21)
+                {
+                    //LOSE
+                    CurrentPlayer.CheckedStatus = true;
+                    MessageBox.Show(CurrentPlayer.Name + " has busted!");
+                    Info.Add(new Info(CurrentPlayer.Name + " has busted!", Model.Info.MessageColors.Bust));
+                    NextPlayer();
+                }
+                else if (CurrentPlayer.Total == 21)
+                {
+                    //WIN
+                    MessageBox.Show(CurrentPlayer.Name + " has won!");
+                    Info.Add(new Info(CurrentPlayer.Name + " has won!", Model.Info.MessageColors.Won));
+                    CurrentPlayer.Won = true;
+                    CurrentPlayer.CheckedStatus = true;
+                    NextPlayer();
+                }
+            }
         }
 
-        void CheckOver()
-        {
-            int i = 0;
-            while (i < playersList.Count && playersList[i].Total >= 21)
-                i++;
-            if (i < playersList.Count)
-                DealerTurn();
-            else
-                GameEnd();
-        }
-
+        // Game over, resets players
         void GameEnd()
         {
-            foreach (var player in playersList)
+            MessageBox.Show("GAME_ENDED");
+
+            // Reset players
+            foreach (var player in Options.Players)
             {
                 if (player.Won)
                     player.Money += player.Bet * 2;
+                player.Won = false;
+                player.CheckedStatus = false;
+                player.Cards = new ObservableCollection<Card>();
+                player.Total = 0;
             }
-
-            MessageBox.Show("GAME_ENDED");
-            ClearPlayers();
             Window.Hide();
+
+            // Window position
             previousWindow.Left = Options.Left;
             previousWindow.Top = Options.Top;
             previousWindow.Height = Options.Height;
             previousWindow.Width = Options.Width;
+
             previousWindow.ReCalc();
             previousWindow.Show();
         }
@@ -180,57 +234,27 @@ namespace CardGame21.ViewModel
             this.previousWindow = previousWindow;
             this.cardLogic = Options.CardLogic;
             Info = new ObservableCollection<Info>();
+            Players = Options.Players;
 
+            // Hit button
             HitCommand = new RelayCommand(() =>
             {
-                if (playersList[counter].Total < 21)
+                if (CurrentPlayer.Total < 21)
                 {
                     Card card = cardLogic.DrawCard(true);
-                    playersList[counter].AddACard(card);
+                    CurrentPlayer.AddACard(card);
                     Info.Add(new Info(CurrentPlayer.Name + " choose hit, got " + card.Name, Model.Info.MessageColors.Hit));
-
                 }
-                if (playersList[counter].Total > 21)
-                {
-                    //LOSE
-                    MessageBox.Show(CurrentPlayer.Name + " has busted!");
-                    Info.Add(new Info(CurrentPlayer.Name + " has busted!", Model.Info.MessageColors.Bust));
-                    counter++;
-                    if (counter < playersList.Count)
-                    {
-                        CurrentPlayer = playersList[counter];
-                        Info.Add(new Info(CurrentPlayer.Name + "'s turn!", Model.Info.MessageColors.Turn));
-                    }
-                    else
-                        CheckOver();
-                }
-                else if (playersList[counter].Total == 21)
-                {
-                    //WIN
-                    MessageBox.Show(CurrentPlayer.Name + " has won!");
-                    Info.Add(new Info(CurrentPlayer.Name + " has won!", Model.Info.MessageColors.Won));
-                    CurrentPlayer.Won = true;
-                    counter++;
-                    if (counter < playersList.Count)
-                        CurrentPlayer = playersList[counter];
-                    else
-                        CheckOver();
-                }
+                CheckPlayer();
             });
-
+            // Stand button
             StandCommand = new RelayCommand(() =>
             {
                 Info.Add(new Info(CurrentPlayer.Name + " choose stand", Model.Info.MessageColors.Stand));
                 CurrentPlayer.Color = "CornflowerBlue";
-                counter++;
                 NextPlayer();
-                if (CurrentPlayer == null)
-                {
-                    DealerTurn();
-                }
             });
 
-            playersList = Options.Players;
             dealers = new ObservableCollection<Dealer>();
         }
 
@@ -266,78 +290,49 @@ namespace CardGame21.ViewModel
             if (Dealers[0].Total > 21)
             {
                 MessageBox.Show("Dealer busted!");
-                foreach (var player in playersList)
-                {
-                    if (!player.Won && player.Total < 22)
-                    {
-                        player.Won = true;
-                        MessageBox.Show(player.Name + " has won!");
-                    }
-                }
+                Dealers[0].Total = 0;
             }
-            else
-            {
-                foreach (var player in playersList)
-                {
-                    if (Dealers[0].Total < player.Total && player.Total < 22)
-                    {
-                        if (!player.Won)
-                        {
-                            player.Won = true;
-                            MessageBox.Show(player.Name + " has won!");
-                        }
-                    }
-                    else if (Dealers[0].Total >= player.Total && player.Total < 22)
-                        MessageBox.Show(player.Name + " has lost!");
-                }
-            }
+            Dealers[0].DealOver = true;
+            CheckPlayer();
             GameEnd();
-        }
-
-        void ClearPlayers()
-        {
-            foreach (var player in Options.Players)
-            {
-                player.Cards = new ObservableCollection<Card>();
-            }
         }
 
         public void FirstDraw()
         {
-            CurrentPlayer = playersList[0];
+            CurrentPlayer = Options.Players[0];
             AllowUIToUpdate();
             Dealers.Add(new Dealer(cardLogic.Cards));
             AllowUIToUpdate();
 
-            foreach (var player in playersList)
+            foreach (var player in Options.Players)
             {
                 player.Won = false;
                 AllowUIToUpdate();
                 player.AddACard(cardLogic.DrawCard(true));
                 AllowUIToUpdate();
-                playersList[counter].Calc();
+                CurrentPlayer.Calc();
             }
 
             Dealers[0].AddACard(cardLogic.DrawCard(true));
 
-            foreach (var player in playersList)
+            foreach (var player in Options.Players)
             {
                 AllowUIToUpdate();
                 player.AddACard(cardLogic.DrawCard(true));
                 AllowUIToUpdate();
-                playersList[counter].Calc();
+                CurrentPlayer.Calc();
             }
 
             Dealers[0].AddACard(cardLogic.DrawCard(false));
             AllowUIToUpdate();
 
-            foreach (var player in playersList)
+            foreach (var player in Options.Players)
             {
                 if (player.Total == 21)
                 {
-                    CurrentPlayer.Won = true;
+                    player.Won = true;
+                    player.CheckedStatus = true;
                     MessageBox.Show(player.Name + " has won!");
-                    NextPlayer();
                 }
                 else
                 {
@@ -345,13 +340,20 @@ namespace CardGame21.ViewModel
                 }
             }
 
-            if (CurrentPlayer == null)
-                GameEnd();
-            else
+            int i = 0;
+            while (i < Options.Players.Count && Options.Players[i].Won)
             {
+                i++;
+            }
+
+            if (i < Options.Players.Count)
+            {
+                CurrentPlayer = Options.Players[i];
                 Info.Add(new Info(CurrentPlayer.Name + "'s turn", Model.Info.MessageColors.Turn));
                 CurrentPlayer.Color = "Navy";
             }
+            else
+                GameEnd();
         }
     }
 }

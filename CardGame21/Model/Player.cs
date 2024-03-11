@@ -147,6 +147,20 @@ namespace CardGame21.Model
             }
         }
 
+        bool checkedStatus;
+        public bool CheckedStatus
+        {
+            get
+            {
+                return checkedStatus;
+            }
+            set
+            {
+                checkedStatus = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CheckedStatus"));
+            }
+        }
+
         public Player(string name)
         {
             Name = name;
