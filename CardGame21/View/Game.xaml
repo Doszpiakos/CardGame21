@@ -28,11 +28,31 @@
             <RowDefinition Height="5*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
+        <ListView   x:Name="infoView"
+                    Background="LemonChiffon"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Grid.RowSpan="3"
+                    ItemsSource="{Binding Info}"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    ScrollViewer.CanContentScroll="False">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical"
+                                Grid.Column="0"
+                                Background="LemonChiffon">
+                        <Label Content="{Binding Message}"
+                               Background="{Binding Color}"
+                               Foreground="AliceBlue" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <ListView   x:Name="dealerView"
                     Background="LemonChiffon"
                     Grid.Row="0"
                     Grid.Column="0"
-                    Grid.ColumnSpan="3"
+                    Grid.ColumnSpan="2"
                     ItemsSource="{Binding Dealers}"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     ScrollViewer.CanContentScroll="False">
@@ -82,7 +102,7 @@
                     Background="LemonChiffon"
                     Grid.Row="2"
                     Grid.Column="0"
-                    Grid.ColumnSpan="3"
+                    Grid.ColumnSpan="2"
                     ItemsSource="{Binding PlayersList}"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     ScrollViewer.CanContentScroll="False">
@@ -98,8 +118,10 @@
                                     Grid.Column="0"
                                     Background="CornflowerBlue">
                             <Label Content="{Binding Name}"
+                                   Background="{Binding Color}"
                                    Foreground="AliceBlue" />
                             <Label Content="{Binding Total}"
+                                   Background="{Binding Color}"
                                    Foreground="AliceBlue" />
                         </StackPanel>
                         <ListView Grid.Row="1"
@@ -129,6 +151,7 @@
             </ListView.ItemTemplate>
         </ListView>
         <Label Content="{Binding CurrentPlayer.Name}"
+               ContentStringFormat="Current player: {0}"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                Background="CornflowerBlue"

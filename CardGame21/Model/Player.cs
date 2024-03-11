@@ -43,6 +43,20 @@ namespace CardGame21.Model
             return calc;
         }
 
+        string color;
+        public string Color
+        {
+            get
+            {
+                return color;
+            }
+            set
+            {
+                color = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Color"));
+            }
+        }
+
         string name;
         public string Name
         {
@@ -53,7 +67,7 @@ namespace CardGame21.Model
             set
             {
                 name = value;
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, Name));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
             }
         }
 
@@ -139,6 +153,7 @@ namespace CardGame21.Model
             Cards = new ObservableCollection<Card>();
             Money = 1000;
             Won = false;
+            Color = "CornflowerBlue";
         }
 
         public void AddACard(Card card)

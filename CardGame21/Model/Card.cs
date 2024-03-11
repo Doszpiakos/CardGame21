@@ -86,7 +86,19 @@ namespace CardGame21.Model
             }
         }
 
-        public string Name { get; set; }
+        string name;
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
+            }
+        }
 
         public Card(int value, Suits suit, bool faceUp)
         {
