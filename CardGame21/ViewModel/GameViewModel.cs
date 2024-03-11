@@ -140,6 +140,12 @@ namespace CardGame21.ViewModel
 
         void GameEnd()
         {
+            foreach (var player in playersList)
+            {
+                if (player.Won)
+                    player.Money += player.Bet * 2;
+            }
+
             MessageBox.Show("GAME_ENDED");
             ClearPlayers();
             Window.Hide();
@@ -175,6 +181,7 @@ namespace CardGame21.ViewModel
                 {
                     //WIN
                     MessageBox.Show(CurrentPlayer.Name + " has won!");
+                    CurrentPlayer.Won = true;
                     counter++;
                     if (counter < playersList.Count)
                         CurrentPlayer = playersList[counter];
@@ -227,14 +234,28 @@ namespace CardGame21.ViewModel
             if (Dealers[0].Total > 21)
             {
                 MessageBox.Show("Dealer busted!");
+                foreach (var player in playersList)
+                {
+                    if (!player.Won && player.Total < 22)
+                    {
+                        player.Won = true;
+                        MessageBox.Show(player.Name + " has won!");
+                    }
+                }
             }
             else
             {
                 foreach (var player in playersList)
                 {
-                    if (Dealers[0].Total < player.Total)
-                        MessageBox.Show(player.Name + " has won!");
-                    else
+                    if (Dealers[0].Total < player.Total && player.Total < 22)
+                    {
+                        if (!CurrentPlayer.Won)
+                        {
+                            CurrentPlayer.Won = true;
+                            MessageBox.Show(player.Name + " has won!");
+                        }
+                    }
+                    else if (player.Total < 22)
                         MessageBox.Show(player.Name + " has lost!");
                 }
             }
@@ -258,6 +279,7 @@ namespace CardGame21.ViewModel
 
             foreach (var player in playersList)
             {
+                player.Won = false;
                 AllowUIToUpdate();
                 player.AddACard(cardLogic.DrawCard(true));
                 AllowUIToUpdate();
@@ -281,6 +303,7 @@ namespace CardGame21.ViewModel
             {
                 if (player.Total == 21)
                 {
+                    CurrentPlayer.Won = true;
                     MessageBox.Show(player.Name + " has won!");
                     NextPlayer();
                 }

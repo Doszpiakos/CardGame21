@@ -77,8 +77,6 @@ namespace CardGame21.ViewModel
             }
         }
 
-        ObservableCollection<Player> players = new ObservableCollection<Player>();
-
         int numOfDecks = 1;
         public int NumOfDecks
         {
@@ -91,6 +89,18 @@ namespace CardGame21.ViewModel
                 numOfDecks = value;
                 Options.NumOfDecks = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NumOfDecks"));
+            }
+        }
+
+        ObservableCollection<Player> playersList;
+
+        public ObservableCollection<Player> PlayersList
+        {
+            get => playersList;
+            set
+            {
+                playersList = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PayersList"));
             }
         }
 
@@ -116,6 +126,7 @@ namespace CardGame21.ViewModel
                 }
                 else
                     bet = 0;
+                CurrentPlayer.Bet = bet;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Bet"));
             }
         }
@@ -145,6 +156,7 @@ namespace CardGame21.ViewModel
         }
         public NewGameViewModel(MainWindow main)
         {
+            PlayersList = Options.Players;
             CurrentPlayer = Options.Players[counter];
 
             StartGameCommand = new RelayCommand(() =>
@@ -167,6 +179,7 @@ namespace CardGame21.ViewModel
             {
                 if (counter < Options.Players.Count)
                 {
+                    CurrentPlayer.Bet = bet;
                     CurrentPlayer.Money = CurrentPlayer.Money - bet;
                     counter++;
                 }

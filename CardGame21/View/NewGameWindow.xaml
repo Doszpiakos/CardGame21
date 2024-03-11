@@ -37,18 +37,45 @@
                Grid.Column="0"
                Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="0.5*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
+            <ListView   x:Name="playersView"
+                        Background="LemonChiffon"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.RowSpan="3"
+                        ItemsSource="{Binding PlayersList}"
+                        ScrollViewer.VerticalScrollBarVisibility="Visible"
+                        ScrollViewer.CanContentScroll="False">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Vertical"
+                                        Grid.Column="0"
+                                        Background="CornflowerBlue">
+                                <Label Content="{Binding Name}"
+                                       Foreground="AliceBlue" />
+                                <Label Content="{Binding Money}"
+                                       Foreground="AliceBlue" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <Button  Grid.Column="1"
                      Grid.Row="0"
                      Content="-"

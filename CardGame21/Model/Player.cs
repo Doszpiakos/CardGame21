@@ -119,11 +119,26 @@ namespace CardGame21.Model
             }
         }
 
+        bool won;
+        public bool Won
+        {
+            get
+            {
+                return won;
+            }
+            set
+            {
+                won = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Won"));
+            }
+        }
+
         public Player(string name)
         {
             Name = name;
             Cards = new ObservableCollection<Card>();
             Money = 1000;
+            Won = false;
         }
 
         public void AddACard(Card card)
