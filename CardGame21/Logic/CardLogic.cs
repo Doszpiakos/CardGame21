@@ -56,7 +56,7 @@ namespace CardGame21.Logic
         {
             if (Cards.Count == 0)
             {
-                MessageBox.Show("Deck is empty, reshuffling deck!");
+                MessageBox.Show("Deck is empty, generating new deck!");
                 GenerateDecks();
             }
 

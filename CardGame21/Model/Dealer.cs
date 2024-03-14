@@ -12,7 +12,7 @@ namespace CardGame21.Model
 {
     public class Dealer : INotifyCollectionChanged, INotifyPropertyChanged
     {
-
+        #region Variables/Properties
         string name;
         public string Name
         {
@@ -98,6 +98,12 @@ namespace CardGame21.Model
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DealOver"));
             }
         }
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
         public void RevealCard()
         {
             DealerHand[1].FaceUp = true;
@@ -117,8 +123,5 @@ namespace CardGame21.Model
             DealerHand = new ObservableCollection<Card>();
             Name = "Dealer";
         }
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

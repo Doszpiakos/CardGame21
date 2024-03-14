@@ -11,32 +11,7 @@ namespace CardGame21.Model
     {
         public enum MessageColors { Hit, Stand, Bust, Won, Turn }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public Info(string message, MessageColors messageColor)
-        {
-            Message = message;
-            string color = "";
-            switch (messageColor)
-            {
-                case MessageColors.Hit:
-                    color = "Maroon";
-                    break;
-                case MessageColors.Stand:
-                    color = "Navy";
-                    break;
-                case MessageColors.Bust:
-                    color = "Red";
-                    break;
-                case MessageColors.Won:
-                    color = "Green";
-                    break;
-                case MessageColors.Turn:
-                    color = "Blue";
-                    break;
-            }
-            Color = color;
-        }
+        #region Variables/Properties
 
         string message;
         public string Message
@@ -64,6 +39,34 @@ namespace CardGame21.Model
                 color = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Color"));
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        public Info(string message, MessageColors messageColor)
+        {
+            Message = message;
+            string color = "";
+            switch (messageColor)
+            {
+                case MessageColors.Hit:
+                    color = "Maroon";
+                    break;
+                case MessageColors.Stand:
+                    color = "Navy";
+                    break;
+                case MessageColors.Bust:
+                    color = "Red";
+                    break;
+                case MessageColors.Won:
+                    color = "Green";
+                    break;
+                case MessageColors.Turn:
+                    color = "Blue";
+                    break;
+            }
+            Color = color;
         }
     }
 }

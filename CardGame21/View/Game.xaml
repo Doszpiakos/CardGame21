@@ -24,10 +24,10 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.5*" />
-            <RowDefinition Height="0.1*" />
             <RowDefinition Height="5*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
+        <!-- Info bar -->
         <ListView   x:Name="infoView"
                     Background="LemonChiffon"
                     Grid.Row="0"
@@ -48,6 +48,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <!-- /Info bar -->
+        <!-- Dealer cards -->
         <ListView   x:Name="dealerView"
                     Background="LemonChiffon"
                     Grid.Row="0"
@@ -98,9 +100,11 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <!-- /Dealer cards -->
+        <!-- Players cards -->
         <ListView   x:Name="playersView"
                     Background="LemonChiffon"
-                    Grid.Row="2"
+                    Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     ItemsSource="{Binding Players}"
@@ -128,7 +132,7 @@
                                   Grid.Column="1"
                                   Margin="0"
                                   Background="LemonChiffon"
-                                  ItemsSource="{Binding Cards}">
+                                  ItemsSource="{Binding Cards, UpdateSourceTrigger=PropertyChanged}">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
@@ -138,7 +142,10 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical"
                                                 Background="{Binding Color}">
+                                        <Label Content="{Binding Name}"
+                                               Foreground="AliceBlue" />
                                         <Label Content="{Binding Value}"
+                                               HorizontalAlignment="Center"
                                                Foreground="AliceBlue" />
                                         <Label Content="{Binding Suit}"
                                                Foreground="AliceBlue" />
@@ -150,21 +157,26 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <!-- /Players cards -->
+        <!-- Bottom row commands -->
         <Label Content="{Binding CurrentPlayer.Name}"
                ContentStringFormat="Current player: {0}"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
                Background="CornflowerBlue"
                Foreground="AliceBlue"
-               Grid.Row="3"
+               Grid.Row="2"
                Grid.Column="0" />
         <Button Content="HIT"
+                IsEnabled="{Binding HitEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Command="{Binding HitCommand}"
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="1" />
         <Button Content="STAND"
+                IsEnabled="{Binding StandEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Command="{Binding StandCommand}"
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="2" />
+        <!-- /Bottom row commands -->
     </Grid>
 </Window>

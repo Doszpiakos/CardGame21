@@ -28,6 +28,7 @@
                    FontSize="40"
                    HorizontalContentAlignment="Center" />
             <Button Content="New Game"
+                    IsEnabled="{Binding StartEnabled, UpdateSourceTrigger=PropertyChanged}"
                     Margin="150,40,150,20"
                     Command="{Binding NewGameCommand}"
                     Foreground="Yellow"

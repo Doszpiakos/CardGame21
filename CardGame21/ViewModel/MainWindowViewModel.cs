@@ -19,13 +19,15 @@ namespace CardGame21.ViewModel
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        public static double Left 
+        #region Variables/Properties
+
+        public static double Left
         {
-            get 
+            get
             {
                 return Options.Left;
             }
-            set 
+            set
             {
                 Options.Left = value;
             }
@@ -64,11 +66,19 @@ namespace CardGame21.ViewModel
             }
         }
 
-        public ICommand NewGameCommand { get; set; }
-        public ICommand AddPlayerCommand { get; set; }
-        public ICommand ExitCommand { get; set; }
-
-        public MainWindow main;
+        bool startEnabled;
+        public bool StartEnabled
+        {
+            get
+            {
+                return startEnabled;
+            }
+            set
+            {
+                startEnabled = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartEnabled"));
+            }
+        }
 
         string playerInput;
         public string PlayerInput
@@ -94,7 +104,14 @@ namespace CardGame21.ViewModel
         NewGameViewModel newGameViewModel;
         NewGameWindow newGame;
 
+        public ICommand NewGameCommand { get; set; }
+        public ICommand AddPlayerCommand { get; set; }
+        public ICommand ExitCommand { get; set; }
+
+        public MainWindow main;
         public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
 
         public MainWindowViewModel()
         {
@@ -104,7 +121,7 @@ namespace CardGame21.ViewModel
             Height = Options.Height;
             Width = Options.Width;
             PlayerInput = "NewPlayer";
-            NewGameCommand = new RelayCommand(() => 
+            NewGameCommand = new RelayCommand(() =>
             {
                 if (PlayersList.Count > 0)
                 {
@@ -126,6 +143,7 @@ namespace CardGame21.ViewModel
                 else
                     MessageBox.Show("Name is taken!");
                 PlayerInput = "NewPlayer";
+                StartEnabled = true;
             });
 
             ExitCommand = new RelayCommand(() =>

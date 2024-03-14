@@ -39,5 +39,11 @@ namespace CardGame21.View
         {
             System.Windows.Application.Current.Shutdown();
         }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if ((sender as TextBox).Text == "")
+                (sender as TextBox).Text = "1";
+        }
     }
 }

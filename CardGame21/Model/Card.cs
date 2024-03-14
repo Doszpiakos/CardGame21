@@ -13,13 +13,7 @@ namespace CardGame21.Model
 
     public class Card : INotifyPropertyChanged
     {
-        public void RevealCard()
-        {
-            Value = value;
-            Suit = suit;
-            Color = color;
-        }
-
+       #region Variables/Properties
         int value;
 
         public int Value
@@ -50,6 +44,7 @@ namespace CardGame21.Model
                 faceUp = value;
             }
         }
+        
         Suits suit;
 
         public Suits Suit
@@ -68,8 +63,6 @@ namespace CardGame21.Model
         }
 
         string color;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public string Color
         {
@@ -100,6 +93,10 @@ namespace CardGame21.Model
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
         public Card(int value, Suits suit, bool faceUp)
         {
             AddName(value);
@@ -112,6 +109,13 @@ namespace CardGame21.Model
             Suit = suit;
             SetColor(suit);
             FaceUp = faceUp;
+        }
+
+        public void RevealCard()
+        {
+            Value = value;
+            Suit = suit;
+            Color = color;
         }
 
         void SetColor(Suits suit)

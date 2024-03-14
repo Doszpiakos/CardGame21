@@ -12,36 +12,10 @@ namespace CardGame21.Model
 {
     public class Player : INotifyCollectionChanged, INotifyPropertyChanged
     {
-        public int Calc()
-        {
-            int calc = 0;
-            int aceCounter = 0;
+        #region Variables/Properties
 
-            foreach (var card in cards)
-            {
-                if (card.Value == 11)
-                    aceCounter++;
-                calc += card.Value;
-            }
-
-            if (calc > 21 && aceCounter > 0)
-            {
-                int i = 0;
-
-                while (calc > 21 && i < cards.Count)
-                {
-                    if (cards[i].Value == 11)
-                    {
-                        aceCounter--;
-                        cards[i].Value = 1;
-                        calc -= 10;
-                    }
-                    i++;
-                }
-            }
-
-            return calc;
-        }
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         string color;
         public string Color
@@ -160,14 +134,46 @@ namespace CardGame21.Model
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CheckedStatus"));
             }
         }
+        #endregion
 
         public Player(string name)
         {
             Name = name;
             Cards = new ObservableCollection<Card>();
-            Money = 1000;
+            Money = 500;
             Won = false;
             Color = "CornflowerBlue";
+        }
+
+        public int Calc()
+        {
+            int calc = 0;
+            int aceCounter = 0;
+
+            foreach (var card in cards)
+            {
+                if (card.Value == 11)
+                    aceCounter++;
+                calc += card.Value;
+            }
+
+            if (calc > 21 && aceCounter > 0)
+            {
+                int i = 0;
+
+                while (calc > 21 && i < cards.Count)
+                {
+                    if (cards[i].Value == 11)
+                    {
+                        aceCounter--;
+                        cards[i].Value = 1;
+                        calc -= 10;
+                    }
+                    i++;
+                }
+            }
+
+            return calc;
         }
 
         public void AddACard(Card card)
@@ -175,8 +181,5 @@ namespace CardGame21.Model
             Cards.Add(card);
             Total = Calc();
         }
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

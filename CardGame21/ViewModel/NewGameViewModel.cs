@@ -19,6 +19,8 @@ namespace CardGame21.ViewModel
 {
     public class NewGameViewModel : INotifyPropertyChanged
     {
+        #region Variables/Properties
+
         public static double Left
         {
             get
@@ -63,6 +65,21 @@ namespace CardGame21.ViewModel
                 Options.Width = value;
             }
         }
+
+        bool betEnabled;
+        public bool BetEnabled
+        {
+            get
+            {
+                return betEnabled;
+            }
+            set
+            {
+                betEnabled = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BetEnabled"));
+            }
+        }
+
         Player currentPlayer;
         public Player CurrentPlayer
         {
@@ -104,7 +121,7 @@ namespace CardGame21.ViewModel
             }
         }
 
-        int bet = 2;
+        int bet = 1;
         public int Bet
         {
             get
@@ -115,22 +132,36 @@ namespace CardGame21.ViewModel
             {
                 if (CurrentPlayer != null)
                 {
+                    if (value > 500)
+                        value = 500;
                     if (value > CurrentPlayer.Money)
                         bet = CurrentPlayer.Money;
-                    if (value < 1)
+                    else if (value < 1)
                         bet = 1;
-                    else if (value > 500)
-                        bet = 500;
                     else
                         bet = value;
+                    CurrentPlayer.Bet = bet;
+                    bet = 1;
                 }
                 else
-                    bet = 0;
-                CurrentPlayer.Bet = bet;
+                    bet = 1;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Bet"));
             }
         }
-        int counter = 0;
+
+        bool startEnabled;
+        public bool StartEnabled
+        {
+            get
+            {
+                return startEnabled;
+            }
+            set
+            {
+                startEnabled = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartEnabled"));
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -142,51 +173,101 @@ namespace CardGame21.ViewModel
         public ICommand MinusCommand { get; set; }
         public ICommand BetCommand { get; set; }
 
+        #endregion
+
         public void Reset()
         {
-            counter = 0;
             int i = 0;
-            while (i < Options.Players.Count && Options.Players[i].Money < 1)
+            Bet = 1;
+
+            while (i < Options.Players.Count)
             {
-                counter++;
+                if (Options.Players[i].Money == 0)
+                {
+                    MessageBox.Show(Options.Players[i].Name + " has no money left!");
+                    Options.Players.RemoveAt(i);
+                }
                 i++;
             }
-            if (i < Options.Players.Count)
-                CurrentPlayer = Options.Players[i];
+
+            if (Options.Players.Count > 0)
+            {
+                foreach (var player in Options.Players)
+                {
+                    player.Total = 0;
+                    player.Bet = 0;
+                    for (int j = player.Cards.Count; j > -1; j--)
+                    {
+
+                    }
+                }
+                CurrentPlayer = Options.Players[0];
+                CurrentPlayer.Color = "Navy";
+                StartEnabled = false;
+                BetEnabled = true;
+                this.Window.Show();
+            }
+            else
+            {
+                MessageBox.Show("No more players left!");
+                BackCommand.Execute(null);
+            }
+
         }
+
+        void NextPlayer()
+        {
+            // Find currentplayer in the list
+            int i = 0;
+            while (i < Options.Players.Count && Options.Players[i] != CurrentPlayer)
+            {
+                i++;
+            }
+
+            // Check if there is a next player
+            i++;
+            if (i < Options.Players.Count)
+            {
+                CurrentPlayer = Options.Players[i];
+                CurrentPlayer.Color = "Navy";
+                BetEnabled = true;
+            }
+            else
+            {
+                CurrentPlayer.Color = "CornflowerBlue";
+                CurrentPlayer = null;
+                StartEnabled = true;
+                BetEnabled = false;
+            }
+        }
+
         public NewGameViewModel(MainWindow main)
         {
             PlayersList = Options.Players;
-            CurrentPlayer = Options.Players[counter];
+            CurrentPlayer = Options.Players[0];
+            CurrentPlayer.Color = "Navy";
+            BetEnabled = true;
+            GameViewModel gameViewModel = null;
+            Game game = null;
 
             StartGameCommand = new RelayCommand(() =>
             {
-                if (CurrentPlayer == null)
-                {
-                    if (Options.CardLogic == null)
-                        Options.CardLogic = new CardLogic(numOfDecks);
-                    GameViewModel gameViewModel = new GameViewModel(Window);
-                    Game game = new Game(gameViewModel);
-                    game.Show();
-                    Window.Hide();
-                    counter = 0;
-                    gameViewModel.FirstDraw();
-                }
-                else
-                    MessageBox.Show("Place your bets!");
+                if (Options.CardLogic == null)
+                    Options.CardLogic = new CardLogic(numOfDecks);
+                if (gameViewModel == null)
+                    gameViewModel = new GameViewModel(Window);
+                if (game == null)
+                    game = new Game(gameViewModel);
+                game.Show();
+                Window.Hide();
+                gameViewModel.FirstDraw();
             });
             BetCommand = new RelayCommand(() =>
             {
-                if (counter < Options.Players.Count)
-                {
-                    CurrentPlayer.Bet = bet;
-                    CurrentPlayer.Money = CurrentPlayer.Money - bet;
-                    counter++;
-                }
-                if (counter < Options.Players.Count)
-                    CurrentPlayer = Options.Players[counter];
-                else
-                    CurrentPlayer = null;
+                CurrentPlayer.Bet = bet;
+                CurrentPlayer.Money = CurrentPlayer.Money - bet;
+                CurrentPlayer.Color = "CornflowerBlue";
+                NextPlayer();
             });
 
             PlusCommand = new RelayCommand(() =>
@@ -205,6 +286,14 @@ namespace CardGame21.ViewModel
 
             BackCommand = new RelayCommand(() =>
             {
+                foreach (var player in Options.Players)
+                {
+                    if (player.Bet != 0)
+                    {
+                        player.Money += player.Bet;
+                    }
+                    player.Bet = 0;
+                }
                 main.Left = Options.Left;
                 main.Top = Options.Top;
                 main.Height = Options.Height;
