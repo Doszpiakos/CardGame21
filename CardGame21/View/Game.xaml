@@ -9,7 +9,7 @@
         d:DesignWidth="600"
         MinWidth="600"
         MinHeight="400"
-        Title="Game"
+        Title="Game21"
         Height="{Binding Height, Mode=TwoWay}"
         Width="{Binding Width, Mode=TwoWay}"
         Left="{Binding Left, Mode=TwoWay}"
@@ -183,11 +183,13 @@
         <Button Content="HIT"
                 IsEnabled="{Binding HitEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Command="{Binding HitCommand}"
+                Background="DarkGray"
                 Grid.Row="2"
                 Grid.Column="1" />
         <Button Content="STAND"
                 IsEnabled="{Binding StandEnabled, UpdateSourceTrigger=PropertyChanged}"
                 Command="{Binding StandCommand}"
+                Background="DarkGray"
                 Grid.Row="2"
                 Grid.Column="2" />
         <!-- /Bottom row commands -->
