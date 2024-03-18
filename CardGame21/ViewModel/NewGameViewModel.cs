@@ -133,7 +133,6 @@ namespace CardGame21.ViewModel
                     else
                         bet = value;
                     CurrentPlayer.Bet = bet;
-                    bet = 1;
                 }
                 else
                     bet = 1;
@@ -169,17 +168,17 @@ namespace CardGame21.ViewModel
 
         public void Reset()
         {
-            int i = 0;
+            int i = Options.Players.Count - 1;
             Bet = 1;
 
-            while (i < Options.Players.Count)
+            while (i > -1)
             {
                 if (Options.Players[i].Money == 0)
                 {
                     MessageBox.Show(Options.Players[i].Name + " has no money left!");
                     Options.Players.RemoveAt(i);
                 }
-                i++;
+                i--;
             }
 
             if (Options.Players.Count > 0)
@@ -260,6 +259,7 @@ namespace CardGame21.ViewModel
                 CurrentPlayer.Money = CurrentPlayer.Money - bet;
                 CurrentPlayer.Color = "CornflowerBlue";
                 NextPlayer();
+                Bet = 1;
             });
 
             PlusCommand = new RelayCommand(() =>

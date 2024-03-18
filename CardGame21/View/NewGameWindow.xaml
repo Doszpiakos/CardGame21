@@ -20,6 +20,7 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -58,7 +59,7 @@
             </ListView.ItemTemplate>
         </ListView>
         <Grid Grid.Column="1"
-              Grid.ColumnSpan="2"
+              Grid.ColumnSpan="3"
               Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
@@ -72,61 +73,42 @@
             </Grid.RowDefinitions>
 
 
-            <Label Content="Player: "
-                   Grid.Row="0"
-                   Grid.Column="0"
-                   FontSize="25"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center" />
             <Label Content="{Binding CurrentPlayer.Name}"
+                   ContentStringFormat="Player: {0}"
                    Grid.Row="0"
-                   Grid.Column="2"
-                   FontSize="25"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center" />
-            <Label Content="Money: "
-                   Grid.Row="1"
                    Grid.Column="0"
                    FontSize="25"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
             <Label Content="{Binding CurrentPlayer.Money}"
+                   ContentStringFormat="Money: {0}"
                    Grid.Row="1"
-                   Grid.Column="2"
+                   Grid.Column="0"
                    FontSize="25"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
             <Label Content="Place your bet: "
-                   Grid.Row="2"
+                   Grid.Row="0"
+                   Grid.Column="2"
                    FontSize="25"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
             <TextBox Text="{Binding Bet, UpdateSourceTrigger=PropertyChanged }"
                      LostFocus="TextBox_LostFocus"
-                     Grid.Row="2"
+                     Grid.Row="1"
                      Grid.Column="3"
                      FontSize="25"
                      MinWidth="30"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center" />
-            <Grid Grid.Row="3"
-                  Grid.ColumnSpan="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-                <Button Content="Bet"
-                        IsEnabled="{Binding BetEnabled, UpdateSourceTrigger=PropertyChanged}"
-                        Command="{Binding BetCommand}"
-                        Foreground="Yellow"
-                        FontSize="25"
-                        Margin="5"
-                        Grid.Column="1" />
-            </Grid>
+            <Button Content="Bet"
+                    IsEnabled="{Binding BetEnabled, UpdateSourceTrigger=PropertyChanged}"
+                    Command="{Binding BetCommand}"
+                    Foreground="Yellow"
+                    FontSize="25"
+                    Margin="5"
+                    Grid.Row="2"
+                    Grid.Column="2" />
         </Grid>
         <Grid Grid.Row="3"
               Grid.Column="1">
