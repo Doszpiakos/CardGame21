@@ -194,12 +194,12 @@ namespace CardGame21.ViewModel
             {
                 foreach (var player in Options.Players)
                 {
-                    player.Total = 0;
                     player.Bet = 0;
-                    for (int j = player.Cards.Count; j > -1; j--)
+                    for (int j = player.Cards.Count - 1; j > -1; j--)
                     {
-
+                        player.Cards.RemoveAt(j);
                     }
+                    player.Total = 0;
                 }
                 CurrentPlayer = Options.Players[0];
                 CurrentPlayer.Color = "Navy";

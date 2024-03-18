@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace CardGame21.Model
 {
@@ -13,7 +15,24 @@ namespace CardGame21.Model
 
     public class Card : INotifyPropertyChanged
     {
-       #region Variables/Properties
+        #region Variables/Properties
+
+        ImageBrush suitImage;
+        public ImageBrush SuitImage
+        {
+            get
+            {
+                if (FaceUp)
+                    return suitImage;
+                return new ImageBrush(new BitmapImage(new Uri("Images/Blank.png", UriKind.Relative)));
+            }
+            set
+            {
+                value = suitImage;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SuitImage"));
+            }
+        }
+
         int value;
 
         public int Value
@@ -44,7 +63,7 @@ namespace CardGame21.Model
                 faceUp = value;
             }
         }
-        
+
         Suits suit;
 
         public Suits Suit
@@ -62,29 +81,15 @@ namespace CardGame21.Model
             }
         }
 
-        string color;
-
-        public string Color
-        {
-            get
-            {
-                if (FaceUp)
-                    return color;
-                return "Tan";
-            }
-            set
-            {
-                color = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Color"));
-            }
-        }
 
         string name;
         public string Name
         {
             get
             {
-                return name;
+                if(FaceUp)
+                    return name;
+                return "Blank";
             }
             set
             {
@@ -115,7 +120,8 @@ namespace CardGame21.Model
         {
             Value = value;
             Suit = suit;
-            Color = color;
+            SuitImage = suitImage;
+            Name = name;
         }
 
         void SetColor(Suits suit)
@@ -123,16 +129,16 @@ namespace CardGame21.Model
             switch (suit)
             {
                 case Suits.Hearts:
-                    Color = "Red";
+                    suitImage = new ImageBrush(new BitmapImage(new Uri("Images/Heart.png", UriKind.Relative)));
                     break;
                 case Suits.Diamonds:
-                    Color = "Maroon";
+                    suitImage = new ImageBrush(new BitmapImage(new Uri("Images/Diamond.png", UriKind.Relative)));
                     break;
                 case Suits.Clubs:
-                    Color = "Gray";
+                    suitImage = new ImageBrush(new BitmapImage(new Uri("Images/Club.png", UriKind.Relative)));
                     break;
                 case Suits.Spades:
-                    Color = "Black";
+                    suitImage = new ImageBrush(new BitmapImage(new Uri("Images/Spade.png", UriKind.Relative)));
                     break;
             }
         }

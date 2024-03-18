@@ -76,7 +76,7 @@
                         </StackPanel>
                         <ListView Grid.Row="0"
                                   Grid.Column="1"
-                                  Background="LemonChiffon"
+                                  Background="CornflowerBlue"
                                   Margin="0"
                                   ItemsSource="{Binding DealerHand, UpdateSourceTrigger=PropertyChanged}">
                             <ListView.ItemsPanel>
@@ -87,10 +87,18 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical"
-                                                Background="{Binding Color}">
+                                                Background="{Binding SuitImage}"
+                                                MinHeight="70"
+                                                MinWidth="70">
+                                        <Label />
+                                        <Label />
                                         <Label Content="{Binding Value}"
-                                               Foreground="AliceBlue" />
-                                        <Label Content="{Binding Suit}"
+                                               Foreground="AliceBlue"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                        <Label Content="{Binding Name}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Bottom"
                                                Foreground="AliceBlue" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -131,7 +139,7 @@
                         <ListView Grid.Row="1"
                                   Grid.Column="1"
                                   Margin="0"
-                                  Background="LemonChiffon"
+                                  Background="CornflowerBlue"
                                   ItemsSource="{Binding Cards, UpdateSourceTrigger=PropertyChanged}">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -141,13 +149,18 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical"
-                                                Background="{Binding Color}">
-                                        <Label Content="{Binding Name}"
-                                               Foreground="AliceBlue" />
+                                                Background="{Binding SuitImage}"
+                                                MinHeight="70"
+                                                MinWidth="70">
+                                        <Label />
+                                        <Label />
                                         <Label Content="{Binding Value}"
                                                HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
                                                Foreground="AliceBlue" />
-                                        <Label Content="{Binding Suit}"
+                                        <Label Content="{Binding Name}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Bottom"
                                                Foreground="AliceBlue" />
                                     </StackPanel>
                                 </DataTemplate>
