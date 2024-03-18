@@ -76,7 +76,7 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <Label Content="{Binding CurrentPlayer.Name}"
-                   Foreground="AliceBlue"
+                   Foreground="Tan"
                    ContentStringFormat="Player: {0}"
                    Grid.Row="0"
                    Grid.Column="0"
@@ -84,7 +84,7 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
             <Label Content="{Binding CurrentPlayer.Money}"
-                   Foreground="AliceBlue"
+                   Foreground="Tan"
                    ContentStringFormat="Money: {0}"
                    Grid.Row="1"
                    Grid.Column="0"
@@ -92,7 +92,7 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
             <Label Content="Place your bet: "
-                   Foreground="AliceBlue"
+                   Foreground="Tan"
                    Grid.Row="0"
                    Grid.Column="2"
                    FontSize="25"
@@ -110,7 +110,7 @@
                     IsEnabled="{Binding BetEnabled, UpdateSourceTrigger=PropertyChanged}"
                     Command="{Binding BetCommand}"
                     Background="DarkGray"
-                    Foreground="Yellow"
+                    Foreground="Brown"
                     FontSize="25"
                     Margin="5"
                     Grid.Row="2"
@@ -128,7 +128,7 @@
                 </Grid.RowDefinitions>
                 <Label Content="{Binding NumOfDecks}"
                        ContentStringFormat="Decks: {0}"
-                       Foreground="AliceBlue"
+                       Foreground="Brown"
                        Grid.Row="1"
                        Grid.Column="0"
                        FontSize="25"
@@ -139,7 +139,7 @@
                         Background="DarkGray"
                         Grid.Column="1"
                         Margin="10"
-                        Foreground="Yellow"
+                        Foreground="Brown"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Center"
                         FontSize="25" />
@@ -148,7 +148,7 @@
                         Background="DarkGray"
                         Grid.Column="2"
                         Margin="10"
-                        Foreground="Yellow"
+                        Foreground="Brown"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Center"
                         FontSize="25" />
@@ -162,7 +162,7 @@
                  Background="DarkGray"
                  Command="{Binding StartGameCommand}"
                  Margin="20"
-                 Foreground="Yellow"
+                 Foreground="Brown"
                  FontSize="25" />
         <Button Grid.Column="0"
                 Grid.ColumnSpan="2"
@@ -171,7 +171,7 @@
                 Margin="20"
                 Background="DarkGray"
                 Command="{Binding BackCommand}"
-                Foreground="Yellow"
+                Foreground="Brown"
                 FontSize="25" />
     </Grid>
 </Window>

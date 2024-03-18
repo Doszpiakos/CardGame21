@@ -20,22 +20,39 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
         <Grid.Background>
             <SolidColorBrush Color="Brown" />
         </Grid.Background>
-        <StackPanel>
-            <Label Content="Game 21"
-                   Foreground="AliceBlue"
+        <Label Content="Game 21"
+               Grid.Row="0"
+               Grid.Column="2"
+                   Foreground="Tan"
                    FontSize="40"
                    HorizontalContentAlignment="Center" />
             <Button Content="New Game"
                     IsEnabled="{Binding StartEnabled, UpdateSourceTrigger=PropertyChanged}"
-                    Margin="150,40,150,20"
+                    Grid.Row="1"
+                    Grid.Column="2"
                     Background="DarkGray"
                     Command="{Binding NewGameCommand}"
-                    Foreground="Yellow"
+                Margin="20"
+                Foreground="Brown"
                     FontSize="25" />
-            <Grid>
+            <Grid Grid.Row="2"
+                  Grid.Column="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="3*" />
@@ -44,41 +61,44 @@
                 </Grid.ColumnDefinitions>
                 <TextBox Name="TextBox"
                          GotFocus="TextBox_GotFocus"
-                         Grid.Column="1"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="2"
                          Text="{Binding PlayerInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"
                          Background="Gray"
                          FontSize="25"
-                         Margin="5"
-                         Padding="10"
-                         Foreground="Yellow" />
+                         Foreground="Brown" />
                 <Button Grid.Column="2"
                         Content="Add player"
-                        Margin="5"
                         Background="DarkGray"
                         Command="{Binding AddPlayerCommand}"
-                        Foreground="Yellow"
+                        Margin="10"
+                        Grid.ColumnSpan="2"
+                        Foreground="Brown"
                         FontSize="25" />
             </Grid>
             <Button Content="Exit"
-                    Margin="150,20,150,20"
+                    Grid.Row="3"
+                    Grid.Column="2"
                     Command="{Binding ExitCommand}"
+                    Margin="20"
                     Background="DarkGray"
-                    Foreground="Yellow"
+                    Foreground="Brown"
                     FontSize="25" />
-            <ListView ItemsSource="{Binding PlayersList}"
-                      Width="502"
-                      ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      ScrollViewer.CanContentScroll="False"
-                      Height="99">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Players"
-                                        DisplayMemberBinding="{Binding Name}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </StackPanel>
+        <ListView ItemsSource="{Binding PlayersList}"
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  Grid.RowSpan="2"
+                  Background="LemonChiffon"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                  ScrollViewer.CanContentScroll="False">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Players"
+                                    DisplayMemberBinding="{Binding Name}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
