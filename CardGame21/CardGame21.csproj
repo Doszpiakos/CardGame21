@@ -10,7 +10,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="MvvmLight" Version="5.4.1.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Images\Blank.png">

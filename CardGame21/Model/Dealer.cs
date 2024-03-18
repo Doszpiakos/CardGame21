@@ -1,34 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace CardGame21.Model
 {
     public class Dealer : INotifyCollectionChanged, INotifyPropertyChanged
     {
         #region Variables/Properties
-        string name;
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, Name));
-            }
-        }
-
+        
+        // Dealers total card value
         int total = 0;
-
         public int Total
         {
             get
@@ -50,6 +31,7 @@ namespace CardGame21.Model
             }
         }
 
+        // Current deck in play
         ObservableCollection<Card> deck;
         public ObservableCollection<Card> Deck
         {
@@ -63,8 +45,9 @@ namespace CardGame21.Model
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, Deck));
             }
         }
-        ObservableCollection<Card> dealerHand;
 
+        // Dealers deck
+        ObservableCollection<Card> dealerHand;
         public ObservableCollection<Card> DealerHand
         {
             get
@@ -84,6 +67,7 @@ namespace CardGame21.Model
             }
         }
 
+        // Dealers turn finished
         bool dealOver;
         public bool DealOver
         {
@@ -104,6 +88,7 @@ namespace CardGame21.Model
 
         #endregion
 
+        // Reveal dealers second card
         public void RevealCard()
         {
             DealerHand[1].FaceUp = true;
@@ -111,6 +96,7 @@ namespace CardGame21.Model
             Total = 0;
         }
 
+        // Add a card to hand
         public void AddACard(Card card)
         {
             dealerHand.Add(card);
@@ -121,7 +107,6 @@ namespace CardGame21.Model
         {
             Deck = deck;
             DealerHand = new ObservableCollection<Card>();
-            Name = "Dealer";
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace CardGame21.Model
 {
@@ -13,6 +8,7 @@ namespace CardGame21.Model
 
         #region Variables/Properties
 
+        // Log message
         string message;
         public string Message
         {
@@ -27,6 +23,7 @@ namespace CardGame21.Model
             }
         }
 
+        // Message background color
         string color;
         public string Color
         {

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace CardGame21.Model
 {
@@ -14,9 +8,7 @@ namespace CardGame21.Model
     {
         #region Variables/Properties
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        // Current/Selected player color change
         string color;
         public string Color
         {
@@ -31,6 +23,7 @@ namespace CardGame21.Model
             }
         }
 
+        // Player name
         string name;
         public string Name
         {
@@ -45,8 +38,8 @@ namespace CardGame21.Model
             }
         }
 
+        // Player total card value
         int total = 0;
-
         public int Total
         {
             get
@@ -65,8 +58,8 @@ namespace CardGame21.Model
             }
         }
 
+        // Player current hand
         ObservableCollection<Card> cards;
-
         public ObservableCollection<Card> Cards
         {
             get
@@ -79,6 +72,8 @@ namespace CardGame21.Model
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, Cards));
             }
         }
+
+        // Player current bet
         int bet;
         public int Bet
         {
@@ -93,6 +88,7 @@ namespace CardGame21.Model
             }
         }
 
+        // Player current money
         int money;
         public int Money
         {
@@ -107,6 +103,7 @@ namespace CardGame21.Model
             }
         }
 
+        // Player won this round
         bool won;
         public bool Won
         {
@@ -121,6 +118,7 @@ namespace CardGame21.Model
             }
         }
 
+        // Player won/lost already logged
         bool checkedStatus;
         public bool CheckedStatus
         {
@@ -134,6 +132,10 @@ namespace CardGame21.Model
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CheckedStatus"));
             }
         }
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         #endregion
 
         public Player(string name)
@@ -145,6 +147,7 @@ namespace CardGame21.Model
             Color = "CornflowerBlue";
         }
 
+        // Checks and changes "ace" values in hand
         public int Calc()
         {
             int calc = 0;
@@ -176,6 +179,7 @@ namespace CardGame21.Model
             return calc;
         }
 
+        // Add a card to hand
         public void AddACard(Card card)
         {
             Cards.Add(card);

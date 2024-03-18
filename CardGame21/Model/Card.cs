@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
+﻿using System.ComponentModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -17,6 +10,7 @@ namespace CardGame21.Model
     {
         #region Variables/Properties
 
+        // Card background image
         ImageBrush suitImage;
         public ImageBrush SuitImage
         {
@@ -33,8 +27,8 @@ namespace CardGame21.Model
             }
         }
 
+        // Card value
         int value;
-
         public int Value
         {
             get
@@ -50,8 +44,8 @@ namespace CardGame21.Model
             }
         }
 
+        // Card is revealed
         bool faceUp;
-
         public bool FaceUp
         {
             get
@@ -64,8 +58,8 @@ namespace CardGame21.Model
             }
         }
 
+        // Card suit
         Suits suit;
-
         public Suits Suit
         {
             get
@@ -81,7 +75,7 @@ namespace CardGame21.Model
             }
         }
 
-
+        // Card name
         string name;
         public string Name
         {
@@ -116,6 +110,7 @@ namespace CardGame21.Model
             FaceUp = faceUp;
         }
 
+        // Reveals dealers second card
         public void RevealCard()
         {
             Value = value;
@@ -124,6 +119,7 @@ namespace CardGame21.Model
             Name = name;
         }
 
+        // Sets card image
         void SetColor(Suits suit)
         {
             switch (suit)
@@ -143,6 +139,7 @@ namespace CardGame21.Model
             }
         }
 
+        // Sets card name by value
         void AddName(int value)
         {
             switch (value)

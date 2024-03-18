@@ -1,11 +1,5 @@
 ﻿using CardGame21.Model;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace CardGame21.Logic
@@ -35,6 +29,7 @@ namespace CardGame21.Logic
             GenerateDecks();
         }
 
+        // Generate decks, based on number of decks
         void GenerateDecks()
         {
             for (int i = 0; i < numOfDecks; i++)
@@ -52,6 +47,8 @@ namespace CardGame21.Logic
             }
         }
 
+        // Draw a card from remaining pile
+        // Checks if deck is empty
         public Card DrawCard(bool faceUp)
         {
             if (Cards.Count == 0)
