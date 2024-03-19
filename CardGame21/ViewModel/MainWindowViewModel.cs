@@ -128,15 +128,18 @@ namespace CardGame21.ViewModel
             });
             AddPlayerCommand = new RelayCommand(() =>
             {
-                int i = 0;
-                while (i < Options.Players.Count && Options.Players[i].Name != PlayerInput)
-                    i++;
-                if (i == Options.Players.Count)
-                    Options.Players.Add(new Player(PlayerInput));
-                else
-                    MessageBox.Show("Name is taken!");
-                PlayerInput = "NewPlayer";
-                StartEnabled = true;
+                if (PlayerInput != "")
+                {
+                    int i = 0;
+                    while (i < Options.Players.Count && Options.Players[i].Name != PlayerInput)
+                        i++;
+                    if (i == Options.Players.Count)
+                        Options.Players.Add(new Player(PlayerInput));
+                    else
+                        MessageBox.Show("Name is taken!");
+                    PlayerInput = "NewPlayer";
+                    StartEnabled = true;
+                }
             });
 
             ExitCommand = new RelayCommand(() =>

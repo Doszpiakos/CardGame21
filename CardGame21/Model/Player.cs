@@ -130,6 +130,7 @@ namespace CardGame21.Model
             {
                 checkedStatus = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CheckedStatus"));
+                ChangeColor();
             }
         }
 
@@ -145,6 +146,14 @@ namespace CardGame21.Model
             Money = 500;
             Won = false;
             Color = "CornflowerBlue";
+        }
+
+        void ChangeColor()
+        {
+            if (won)
+                Color = "Green";
+            else
+                Color = "Red";
         }
 
         // Checks and changes "ace" values in hand

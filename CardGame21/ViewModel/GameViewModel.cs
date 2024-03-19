@@ -184,7 +184,6 @@ namespace CardGame21.ViewModel
         {
             if (CurrentPlayer != null)
             {
-                CurrentPlayer.Color = "CornflowerBlue";
                 int i = 0;
                 while (i < Options.Players.Count && CurrentPlayer != Options.Players[i])
                     i++;
@@ -286,6 +285,7 @@ namespace CardGame21.ViewModel
                     player.Money += player.Bet * 2;
                 player.Won = false;
                 player.CheckedStatus = false;
+                player.Color = "CornflowerBlue";
                 player.Total = 0;
             }
             Window.Hide();

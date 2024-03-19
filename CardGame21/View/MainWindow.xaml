@@ -63,6 +63,7 @@
                          GotFocus="TextBox_GotFocus"
                          Grid.Column="0"
                          Grid.ColumnSpan="2"
+                         MinWidth="20"
                          Text="{Binding PlayerInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"
