@@ -14,6 +14,7 @@ namespace CardGame21.ViewModel
     {
         #region Variables/Properties
 
+        // Window left side
         public static double Left
         {
             get
@@ -25,6 +26,8 @@ namespace CardGame21.ViewModel
                 Options.Left = value;
             }
         }
+
+        // Window top side
         public static double Top
         {
             get
@@ -36,6 +39,8 @@ namespace CardGame21.ViewModel
                 Options.Top = value;
             }
         }
+
+        // Window height
         public static double Height
         {
             get
@@ -47,6 +52,8 @@ namespace CardGame21.ViewModel
                 Options.Height = value;
             }
         }
+
+        // Window width
         public static double Width
         {
             get
@@ -59,6 +66,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Enables start button for UI
         bool startEnabled;
         public bool StartEnabled
         {
@@ -73,6 +81,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Player name input from UI
         string playerInput;
         public string PlayerInput
         {
@@ -81,16 +90,6 @@ namespace CardGame21.ViewModel
             {
                 playerInput = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PlayerInput"));
-            }
-        }
-
-        public ObservableCollection<Player> PlayersList
-        {
-            get => Options.Players;
-            set
-            {
-                Options.Players = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PayersList"));
             }
         }
 
@@ -108,15 +107,19 @@ namespace CardGame21.ViewModel
 
         public MainWindowViewModel()
         {
-            Options.Players = new ObservableCollection<Player>();
+            Options.Players = new ObservableCollection<Player>(); // Creating players list
+
+            // Setting window location info to Options
             Left = Options.Left;
             Top = Options.Top;
             Height = Options.Height;
             Width = Options.Width;
             PlayerInput = "NewPlayer";
+
+            // Start game options menu
             NewGameCommand = new RelayCommand(() =>
             {
-                if (PlayersList.Count > 0)
+                if (Options.Players.Count > 0)
                 {
                     newGameViewModel = new NewGameViewModel(main);
                     newGame = new NewGameWindow(newGameViewModel);
@@ -126,8 +129,11 @@ namespace CardGame21.ViewModel
                 else
                     MessageBox.Show("No players!");
             });
+
+            // Adds new player to players list
             AddPlayerCommand = new RelayCommand(() =>
             {
+                // Checks if player has a name
                 if (PlayerInput != "")
                 {
                     int i = 0;
@@ -142,6 +148,7 @@ namespace CardGame21.ViewModel
                 }
             });
 
+            // Exit command for closing application
             ExitCommand = new RelayCommand(() =>
             {
                 System.Windows.Application.Current.Shutdown();

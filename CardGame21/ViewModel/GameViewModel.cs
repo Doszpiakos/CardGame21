@@ -25,6 +25,7 @@ namespace CardGame21.ViewModel
         public Game Window;
         NewGameWindow previousWindow;
 
+        // Enables hit button for UI
         bool hitEnabled;
         public bool HitEnabled
         {
@@ -39,6 +40,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Enables stand button for UI
         bool standEnabled;
         public bool StandEnabled
         {
@@ -53,6 +55,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Window left side
         public static double Left
         {
             get
@@ -64,6 +67,8 @@ namespace CardGame21.ViewModel
                 Options.Left = value;
             }
         }
+
+        // Window top side
         public static double Top
         {
             get
@@ -75,6 +80,8 @@ namespace CardGame21.ViewModel
                 Options.Top = value;
             }
         }
+
+        // Window height
         public static double Height
         {
             get
@@ -86,6 +93,8 @@ namespace CardGame21.ViewModel
                 Options.Height = value;
             }
         }
+
+        // Window width
         public static double Width
         {
             get
@@ -98,6 +107,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Current player to hit/stand
         Player currentPlayer;
         public Player CurrentPlayer
         {
@@ -112,6 +122,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Message log collection
         ObservableCollection<Info> info;
         public ObservableCollection<Info> Info
         {
@@ -120,17 +131,6 @@ namespace CardGame21.ViewModel
             {
                 info = value;
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, Info));
-            }
-        }
-
-        ObservableCollection<Player> players;
-        public ObservableCollection<Player> Players
-        {
-            get => players;
-            set
-            {
-                players = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Players"));
             }
         }
 
@@ -150,7 +150,6 @@ namespace CardGame21.ViewModel
         public GameViewModel(NewGameWindow previousWindow)
         {
             this.previousWindow = previousWindow;
-            Players = Options.Players;
             Info = new ObservableCollection<Info>();
 
             // Hit button
@@ -217,24 +216,23 @@ namespace CardGame21.ViewModel
         // Checks players won/lost status
         void CheckPlayer()
         {
+            // Checks if dealers turn is over
             if (Dealers[0].DealOver)
             {
-                int total = 0;
-
-                if (Dealers[0].Total < 22)
-                    total = Dealers[0].Total;
-
+                // Checks players who haven't already won or lost
                 foreach (var player in Options.Players)
                 {
                     if (!player.CheckedStatus)
                     {
-                        if (player.Total < 22 && player.Total > total)
+                        // Player won
+                        if (player.Total < 22 && player.Total > Dealers[0].Total)
                         {
                             player.Won = true;
                             player.CheckedStatus = true;
                             Info.Add(new Info(player.Name + " has won!", Model.Info.MessageColors.Won));
                             MessageBox.Show(player.Name + " has won!");
                         }
+                        // Player lost
                         else
                         {
                             player.CheckedStatus = true;
@@ -246,23 +244,24 @@ namespace CardGame21.ViewModel
             }
             else
             {
+                // Current player lost
                 if (CurrentPlayer.Total > 21)
                 {
-                    //LOSE
                     CurrentPlayer.CheckedStatus = true;
                     Info.Add(new Info(CurrentPlayer.Name + " has busted!", Model.Info.MessageColors.Bust));
                     MessageBox.Show(CurrentPlayer.Name + " has busted!");
                     NextPlayer();
                 }
+                // Current player won
                 else if (CurrentPlayer.Total == 21)
                 {
-                    //WIN
                     Info.Add(new Info(CurrentPlayer.Name + " has won!", Model.Info.MessageColors.Won));
                     MessageBox.Show(CurrentPlayer.Name + " has won!");
                     CurrentPlayer.Won = true;
                     CurrentPlayer.CheckedStatus = true;
                     NextPlayer();
                 }
+                // Current player's turn
                 else
                 {
                     HitEnabled = true;
@@ -302,6 +301,7 @@ namespace CardGame21.ViewModel
             previousWindow.ReCalc();
         }
 
+        // Slows the game down, so card draws aren't instant
         private static void AllowUIToUpdate()
         {
             DispatcherFrame frame = new();
@@ -317,6 +317,7 @@ namespace CardGame21.ViewModel
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Input, new Action(delegate { }));
         }
 
+        // Starts dealers turn
         void DealerTurn()
         {
             Info.Add(new Info("Dealers turn!", Model.Info.MessageColors.Turn));
@@ -342,6 +343,7 @@ namespace CardGame21.ViewModel
             GameEnd();
         }
 
+        // Draw everyone two cards
         public void FirstDraw()
         {
             Dealers.Add(new Dealer(Options.CardLogic.Cards));
@@ -352,17 +354,20 @@ namespace CardGame21.ViewModel
             CurrentPlayer = Options.Players[0];
             AllowUIToUpdate();
 
+            // Draw a card to every player
             foreach (var player in Options.Players)
             {
-                player.Won = false;
+                // player.Won = false;
                 AllowUIToUpdate();
                 player.AddACard(Options.CardLogic.DrawCard(true));
                 AllowUIToUpdate();
                 player.Calc();
             }
 
+            // Draw a card to dealer
             Dealers[0].AddACard(Options.CardLogic.DrawCard(true));
 
+            // Draw a second card to players
             foreach (var player in Options.Players)
             {
                 AllowUIToUpdate();
@@ -371,10 +376,12 @@ namespace CardGame21.ViewModel
                 player.Calc();
             }
 
+            // Draw a second card to delaer
             Dealers[0].AddACard(Options.CardLogic.DrawCard(false));
 
             AllowUIToUpdate();
 
+            // Checks if any player got 21 with the first two draws
             foreach (var player in Options.Players)
             {
                 if (player.Total == 21)
@@ -389,10 +396,12 @@ namespace CardGame21.ViewModel
                 }
             }
 
+            // Search for the first player who haven't won yet
             int j = 0;
             while (j < Options.Players.Count && Options.Players[j].Won)
                 j++;
 
+            // Checks if the game is already over
             if (j < Options.Players.Count)
             {
                 CurrentPlayer = Options.Players[j];

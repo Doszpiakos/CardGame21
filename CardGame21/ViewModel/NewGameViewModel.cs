@@ -15,6 +15,7 @@ namespace CardGame21.ViewModel
     {
         #region Variables/Properties
 
+        // Window left side
         public static double Left
         {
             get
@@ -26,6 +27,8 @@ namespace CardGame21.ViewModel
                 Options.Left = value;
             }
         }
+
+        // Window top side
         public static double Top
         {
             get
@@ -37,6 +40,8 @@ namespace CardGame21.ViewModel
                 Options.Top = value;
             }
         }
+
+        // Window height
         public static double Height
         {
             get
@@ -48,6 +53,8 @@ namespace CardGame21.ViewModel
                 Options.Height = value;
             }
         }
+
+        // Window width
         public static double Width
         {
             get
@@ -60,6 +67,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Enables bet button for UI
         bool betEnabled;
         public bool BetEnabled
         {
@@ -74,6 +82,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Current player to make a bet
         Player currentPlayer;
         public Player CurrentPlayer
         {
@@ -88,6 +97,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Number of decks used in next round
         int numOfDecks = 1;
         public int NumOfDecks
         {
@@ -103,18 +113,7 @@ namespace CardGame21.ViewModel
             }
         }
 
-        ObservableCollection<Player> playersList;
-
-        public ObservableCollection<Player> PlayersList
-        {
-            get => playersList;
-            set
-            {
-                playersList = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PayersList"));
-            }
-        }
-
+        // Bet value from UI
         int bet = 1;
         public int Bet
         {
@@ -142,6 +141,7 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Enables start button for UI
         bool startEnabled;
         public bool StartEnabled
         {
@@ -168,6 +168,7 @@ namespace CardGame21.ViewModel
 
         #endregion
 
+        // Deletes players hands, deletes players who have no more money
         public void Reset()
         {
             int i = Options.Players.Count - 1;
@@ -208,6 +209,7 @@ namespace CardGame21.ViewModel
 
         }
 
+        // Sets current player to the next player in the players list
         void NextPlayer()
         {
             // Find currentplayer in the list
@@ -236,13 +238,13 @@ namespace CardGame21.ViewModel
 
         public NewGameViewModel(MainWindow main)
         {
-            PlayersList = Options.Players;
             CurrentPlayer = Options.Players[0];
             CurrentPlayer.Color = "Navy";
             BetEnabled = true;
             GameViewModel gameViewModel = null;
             Game game = null;
 
+            // Starts game
             StartGameCommand = new RelayCommand(() =>
             {
                 if (Options.CardLogic == null)
@@ -255,6 +257,8 @@ namespace CardGame21.ViewModel
                 Window.Hide();
                 gameViewModel.FirstDraw();
             });
+
+            // Sets currentplayer bet
             BetCommand = new RelayCommand(() =>
             {
                 CurrentPlayer.Bet = bet;
@@ -264,6 +268,7 @@ namespace CardGame21.ViewModel
                 Bet = 1;
             });
 
+            // Adds a deck of card for the next game
             PlusCommand = new RelayCommand(() =>
             {
                 if (NumOfDecks < 10)
@@ -271,6 +276,7 @@ namespace CardGame21.ViewModel
                 Options.CardLogic = null;
             });
 
+            // Removes a deck of card for the next game
             MinusCommand = new RelayCommand(() =>
             {
                 if (NumOfDecks > 1)
@@ -278,6 +284,7 @@ namespace CardGame21.ViewModel
                 Options.CardLogic = null;
             });
 
+            // Return to the main menu, resets bet values
             BackCommand = new RelayCommand(() =>
             {
                 foreach (var player in Options.Players)
