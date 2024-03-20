@@ -107,6 +107,21 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Player list for UI
+        ObservableCollection<Player> playersList;
+        public ObservableCollection<Player> PlayersList
+        {
+            get
+            {
+                return playersList;
+            }
+            set
+            {
+                playersList = value;
+                PropertyChanged?.Invoke(null, new PropertyChangedEventArgs("PlayersList"));
+            }
+        }
+
         // Current player to hit/stand
         Player currentPlayer;
         public Player CurrentPlayer
@@ -151,6 +166,7 @@ namespace CardGame21.ViewModel
         {
             this.previousWindow = previousWindow;
             Info = new ObservableCollection<Info>();
+            PlayersList = Options.Players;
 
             // Hit button
             HitCommand = new RelayCommand(() =>
@@ -191,11 +207,18 @@ namespace CardGame21.ViewModel
                 {
                     while (i < Options.Players.Count && Options.Players[i].Won)
                         i++;
-                    CurrentPlayer = Options.Players[i];
-                    Info.Add(new Info(CurrentPlayer.Name + "'s turn", Model.Info.MessageColors.Turn));
-                    CurrentPlayer.Color = "Navy";
-                    HitEnabled = true;
-                    StandEnabled = true;
+                    if (i < Options.Players.Count)
+                    {
+                        CurrentPlayer = Options.Players[i];
+                        Info.Add(new Info(CurrentPlayer.Name + "'s turn", Model.Info.MessageColors.Turn));
+                        CurrentPlayer.Color = "Navy";
+                        HitEnabled = true;
+                        StandEnabled = true;
+                    }
+                    else
+                    {
+                        NextPlayer();
+                    }
                 }
                 else
                 {

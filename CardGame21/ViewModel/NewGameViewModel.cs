@@ -97,6 +97,21 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Player list for UI
+        ObservableCollection<Player> playersList;
+        public ObservableCollection<Player> PlayersList
+        {
+            get
+            {
+                return playersList;
+            }
+            set
+            {
+                playersList = value;
+                PropertyChanged?.Invoke(null, new PropertyChangedEventArgs("PlayersList"));
+            }
+        }
+
         // Number of decks used in next round
         int numOfDecks = 1;
         public int NumOfDecks
@@ -238,6 +253,7 @@ namespace CardGame21.ViewModel
 
         public NewGameViewModel(MainWindow main)
         {
+            PlayersList = Options.Players;
             CurrentPlayer = Options.Players[0];
             CurrentPlayer.Color = "Navy";
             BetEnabled = true;

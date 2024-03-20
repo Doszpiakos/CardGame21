@@ -66,6 +66,21 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Player list for UI
+        ObservableCollection<Player> playersList;
+        public ObservableCollection<Player> PlayersList
+        {
+            get
+            {
+                return playersList;
+            }
+            set
+            {
+                playersList = value;
+                PropertyChanged?.Invoke(null, new PropertyChangedEventArgs("PlayersList"));
+            }
+        }
+
         // Enables start button for UI
         bool startEnabled;
         public bool StartEnabled
@@ -108,7 +123,7 @@ namespace CardGame21.ViewModel
         public MainWindowViewModel()
         {
             Options.Players = new ObservableCollection<Player>(); // Creating players list
-
+            PlayersList = Options.Players;
             // Setting window location info to Options
             Left = Options.Left;
             Top = Options.Top;

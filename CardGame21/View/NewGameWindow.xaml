@@ -76,7 +76,7 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <Label Content="{Binding CurrentPlayer.Name}"
-                   Foreground="Tan"
+                   Foreground="DarkGray"
                    ContentStringFormat="Player: {0}"
                    Grid.Row="0"
                    Grid.Column="0"
@@ -84,7 +84,7 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
             <Label Content="{Binding CurrentPlayer.Money}"
-                   Foreground="Tan"
+                   Foreground="DarkGray"
                    ContentStringFormat="Money: {0}"
                    Grid.Row="1"
                    Grid.Column="0"
@@ -128,7 +128,7 @@
                 </Grid.RowDefinitions>
                 <Label Content="{Binding NumOfDecks}"
                        ContentStringFormat="Decks: {0}"
-                       Foreground="Brown"
+                       Foreground="DarkGray"
                        Grid.Row="1"
                        Grid.Column="0"
                        FontSize="25"

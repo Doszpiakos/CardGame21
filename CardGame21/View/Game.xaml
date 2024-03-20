@@ -115,7 +115,7 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    ItemsSource="{Binding Players}"
+                    ItemsSource="{Binding PlayersList}"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     ScrollViewer.CanContentScroll="False">
             <ListView.ItemTemplate>
@@ -128,7 +128,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Vertical"
                                     Grid.Column="0"
-                                    Background="CornflowerBlue">
+                                    Background="{Binding Color}">
                             <Label Content="{Binding Name}"
                                    Background="{Binding Color}"
                                    Foreground="AliceBlue" />
@@ -139,7 +139,7 @@
                         <ListView Grid.Row="1"
                                   Grid.Column="1"
                                   Margin="0"
-                                  Background="CornflowerBlue"
+                                  Background="{Binding Color}"
                                   ItemsSource="{Binding Cards, UpdateSourceTrigger=PropertyChanged}">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
