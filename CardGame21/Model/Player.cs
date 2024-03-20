@@ -134,6 +134,21 @@ namespace CardGame21.Model
             }
         }
 
+        // Player had it's turn
+        bool turnOver;
+        public bool TurnOver
+        {
+            get
+            {
+                return turnOver;
+            }
+            set
+            {
+                turnOver = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TurnOver"));
+            }
+        }
+
         public event NotifyCollectionChangedEventHandler CollectionChanged;
         public event PropertyChangedEventHandler PropertyChanged;
 

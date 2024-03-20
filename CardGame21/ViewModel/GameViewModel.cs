@@ -186,6 +186,7 @@ namespace CardGame21.ViewModel
             {
                 Info.Add(new Info(CurrentPlayer.Name + " choose stand", Model.Info.MessageColors.Stand));
                 CurrentPlayer.Color = "CornflowerBlue";
+                CurrentPlayer.TurnOver = true;
                 HitEnabled = false;
                 StandEnabled = false;
                 NextPlayer();
@@ -194,46 +195,27 @@ namespace CardGame21.ViewModel
             dealers = new ObservableCollection<Dealer>();
         }
 
+        // Sets Currentplayer
+        void SetCurrentPlayer(Player player)
+        {
+            CurrentPlayer = player;
+            Info.Add(new Info(CurrentPlayer.Name + "'s turn", Model.Info.MessageColors.Turn));
+            CurrentPlayer.Color = "Navy";
+            HitEnabled = true;
+            StandEnabled = true;
+        }
+
         // Chooses next player, starts dealers turn
         void NextPlayer()
         {
-            if (CurrentPlayer != null)
-            {
-                int i = 0;
-                while (i < Options.Players.Count && CurrentPlayer != Options.Players[i])
-                    i++;
+            int i = 0;
+            while (i < Options.Players.Count && (Options.Players[i].TurnOver || Options.Players[i].CheckedStatus))
                 i++;
-                if (i < Options.Players.Count)
-                {
-                    while (i < Options.Players.Count && Options.Players[i].Won)
-                        i++;
-                    if (i < Options.Players.Count)
-                    {
-                        CurrentPlayer = Options.Players[i];
-                        Info.Add(new Info(CurrentPlayer.Name + "'s turn", Model.Info.MessageColors.Turn));
-                        CurrentPlayer.Color = "Navy";
-                        HitEnabled = true;
-                        StandEnabled = true;
-                    }
-                    else
-                    {
-                        NextPlayer();
-                    }
-                }
-                else
-                {
-                    CurrentPlayer = null;
-                    int j = 0;
-                    while (j < Options.Players.Count && Options.Players[j].CheckedStatus == true)
-                    {
-                        j++;
-                    }
-                    if (j < Options.Players.Count)
-                        DealerTurn();
-                    else
-                        GameEnd();
-                }
-            }
+            if (i < Options.Players.Count)
+                SetCurrentPlayer(Options.Players[i]);
+            else
+                DealerTurn();
+
         }
 
         // Checks players won/lost status
@@ -248,7 +230,7 @@ namespace CardGame21.ViewModel
                     if (!player.CheckedStatus)
                     {
                         // Player won
-                        if (player.Total < 22 && player.Total > Dealers[0].Total)
+                        if (player.Total > Dealers[0].Total || Dealers[0].Total > 21)
                         {
                             player.Won = true;
                             player.CheckedStatus = true;
@@ -307,6 +289,7 @@ namespace CardGame21.ViewModel
                     player.Money += player.Bet * 2;
                 player.Won = false;
                 player.CheckedStatus = false;
+                player.TurnOver = false;
                 player.Color = "CornflowerBlue";
                 player.Total = 0;
             }
@@ -374,7 +357,6 @@ namespace CardGame21.ViewModel
             HitEnabled = false;
             StandEnabled = false;
 
-            CurrentPlayer = Options.Players[0];
             AllowUIToUpdate();
 
             // Draw a card to every player
@@ -418,23 +400,7 @@ namespace CardGame21.ViewModel
                     player.Calc();
                 }
             }
-
-            // Search for the first player who haven't won yet
-            int j = 0;
-            while (j < Options.Players.Count && Options.Players[j].Won)
-                j++;
-
-            // Checks if the game is already over
-            if (j < Options.Players.Count)
-            {
-                CurrentPlayer = Options.Players[j];
-                Info.Add(new Info(CurrentPlayer.Name + "'s turn", Model.Info.MessageColors.Turn));
-                CurrentPlayer.Color = "Navy";
-                HitEnabled = true;
-                StandEnabled = true;
-            }
-            else
-                GameEnd();
+            NextPlayer();
         }
     }
 }

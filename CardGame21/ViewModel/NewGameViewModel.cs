@@ -203,6 +203,7 @@ namespace CardGame21.ViewModel
             {
                 foreach (var player in Options.Players)
                 {
+                    Options.CardLogic.DiscardHand(player.Cards);
                     player.Bet = 0;
                     for (int j = player.Cards.Count - 1; j > -1; j--)
                     {

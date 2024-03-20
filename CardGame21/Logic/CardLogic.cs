@@ -8,7 +8,29 @@ namespace CardGame21.Logic
     {
         Random randomGen = new Random();
 
-        public ObservableCollection<Card> Cards { get; }
+        ObservableCollection<Card> cards;
+        public ObservableCollection<Card> Cards
+        {
+            get
+            {
+                return cards;
+            }
+        }
+
+        public ObservableCollection<Card> DiscardPile { get; set; }
+
+        bool needReshuffle;
+        public bool NeedReshuffle
+        {
+            get
+            {
+                return needReshuffle;
+            }
+            set
+            {
+                needReshuffle = value;
+            }
+        }
 
         Suits[] Suits;
 
@@ -16,7 +38,8 @@ namespace CardGame21.Logic
 
         public CardLogic(int numOfDecks)
         {
-            Cards = new ObservableCollection<Card>();
+            cards = new ObservableCollection<Card>();
+            DiscardPile = new ObservableCollection<Card>();
 
             this.numOfDecks = numOfDecks;
 
@@ -51,10 +74,20 @@ namespace CardGame21.Logic
         // Checks if deck is empty
         public Card DrawCard(bool faceUp)
         {
+            if (NeedReshuffle)
+            {
+                GenerateDecks();
+                DiscardPile = new ObservableCollection<Card>();
+            }
             if (Cards.Count == 0)
             {
-                MessageBox.Show("Deck is empty, generating new deck!");
-                GenerateDecks();
+                MessageBox.Show("Deck is empty, reshuffeling discard pile!");
+                NeedReshuffle = true;
+                foreach (var discardedCard in DiscardPile)
+                {
+                    Cards.Add(discardedCard);
+                }
+                DiscardPile = new ObservableCollection<Card>();
             }
 
             int draw = randomGen.Next(0, Cards.Count);
@@ -62,11 +95,19 @@ namespace CardGame21.Logic
             Card card = Cards[draw];
 
             Cards.RemoveAt(draw);
-            
+
             if (!faceUp)
                 card.FaceUp = false;
 
             return card;
+        }
+
+        public void DiscardHand(ObservableCollection<Card> cards)
+        {
+            foreach (var card in cards)
+            {
+                DiscardPile.Add(card);
+            }
         }
     }
 }
