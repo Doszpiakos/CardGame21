@@ -112,22 +112,6 @@ namespace CardGame21.ViewModel
             }
         }
 
-        // Number of decks used in next round
-        int numOfDecks = 1;
-        public int NumOfDecks
-        {
-            get
-            {
-                return numOfDecks;
-            }
-            set
-            {
-                numOfDecks = value;
-                Options.NumOfDecks = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NumOfDecks"));
-            }
-        }
-
         // Bet value from UI
         int bet = 1;
         public int Bet
@@ -177,8 +161,6 @@ namespace CardGame21.ViewModel
 
         public ICommand StartGameCommand { get; set; }
         public ICommand BackCommand { get; set; }
-        public ICommand PlusCommand { get; set; }
-        public ICommand MinusCommand { get; set; }
         public ICommand BetCommand { get; set; }
 
         #endregion
@@ -264,8 +246,6 @@ namespace CardGame21.ViewModel
             // Starts game
             StartGameCommand = new RelayCommand(() =>
             {
-                if (Options.CardLogic == null)
-                    Options.CardLogic = new CardLogic(numOfDecks);
                 if (gameViewModel == null)
                     gameViewModel = new GameViewModel(Window);
                 if (game == null)
@@ -283,22 +263,6 @@ namespace CardGame21.ViewModel
                 CurrentPlayer.Color = "CornflowerBlue";
                 NextPlayer();
                 Bet = 1;
-            });
-
-            // Adds a deck of card for the next game
-            PlusCommand = new RelayCommand(() =>
-            {
-                if (NumOfDecks < 10)
-                    NumOfDecks++;
-                Options.CardLogic = null;
-            });
-
-            // Removes a deck of card for the next game
-            MinusCommand = new RelayCommand(() =>
-            {
-                if (NumOfDecks > 1)
-                    NumOfDecks--;
-                Options.CardLogic = null;
             });
 
             // Return to the main menu, resets bet values

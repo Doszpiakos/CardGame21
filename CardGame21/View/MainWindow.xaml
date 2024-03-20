@@ -28,9 +28,10 @@
             <ColumnDefinition Width="0.5*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="0.7*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <Grid.Background>
@@ -79,8 +80,40 @@
                         Foreground="Brown"
                         FontSize="25" />
             </Grid>
-            <Button Content="Exit"
-                    Grid.Row="3"
+        <Label Content="{Binding NumOfDecks}"
+               ContentStringFormat="Decks: {0}"
+               Foreground="DarkGray"
+               Grid.Row="3"
+               Grid.Column="1"
+               FontSize="25"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center" />
+        <Grid Grid.Row="3"
+              Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="-"
+                    Command="{Binding MinusCommand}"
+                    Background="DarkGray"
+                    Margin="10"
+                    Foreground="Brown"
+                    VerticalContentAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    FontSize="25" />
+            <Button Content="+"
+                    Command="{Binding PlusCommand}"
+                    Background="DarkGray"
+                    Grid.Column="1"
+                    Margin="10"
+                    Foreground="Brown"
+                    VerticalContentAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    FontSize="25" />
+        </Grid>
+        <Button Content="Exit"
+                    Grid.Row="4"
                     Grid.Column="2"
                     Command="{Binding ExitCommand}"
                     Margin="20"

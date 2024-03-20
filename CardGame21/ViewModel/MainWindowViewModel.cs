@@ -66,6 +66,22 @@ namespace CardGame21.ViewModel
             }
         }
 
+        // Number of decks used in next round
+        int numOfDecks = 1;
+        public int NumOfDecks
+        {
+            get
+            {
+                return numOfDecks;
+            }
+            set
+            {
+                numOfDecks = value;
+                Options.NumOfDecks = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NumOfDecks"));
+            }
+        }
+
         // Player list for UI
         ObservableCollection<Player> playersList;
         public ObservableCollection<Player> PlayersList
@@ -111,6 +127,8 @@ namespace CardGame21.ViewModel
         NewGameViewModel newGameViewModel;
         NewGameWindow newGame;
 
+        public ICommand PlusCommand { get; set; }
+        public ICommand MinusCommand { get; set; }
         public ICommand NewGameCommand { get; set; }
         public ICommand AddPlayerCommand { get; set; }
         public ICommand ExitCommand { get; set; }
@@ -136,6 +154,7 @@ namespace CardGame21.ViewModel
             {
                 if (Options.Players.Count > 0)
                 {
+                    Options.CardLogic = new Logic.CardLogic(NumOfDecks);
                     newGameViewModel = new NewGameViewModel(main);
                     newGame = new NewGameWindow(newGameViewModel);
                     newGame.Show();
@@ -161,6 +180,22 @@ namespace CardGame21.ViewModel
                     PlayerInput = "NewPlayer";
                     StartEnabled = true;
                 }
+            });
+
+            // Adds a deck of card for the next game
+            PlusCommand = new RelayCommand(() =>
+            {
+                if (NumOfDecks < 10)
+                    NumOfDecks++;
+                Options.CardLogic = null;
+            });
+
+            // Removes a deck of card for the next game
+            MinusCommand = new RelayCommand(() =>
+            {
+                if (NumOfDecks > 1)
+                    NumOfDecks--;
+                Options.CardLogic = null;
             });
 
             // Exit command for closing application
