@@ -93,7 +93,7 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center" />
             <Label Content="Place your bet: "
-                   Foreground="Tan"
+                   Foreground="DarkGray"
                    Grid.Row="0"
                    Grid.Column="2"
                    FontSize="25"

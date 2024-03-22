@@ -40,8 +40,8 @@
         <Label Content="Game 21"
                Grid.Row="0"
                Grid.Column="2"
-                   Foreground="Tan"
-                   FontSize="40"
+                   Foreground="DarkGray"
+                   FontSize="50"
                    HorizontalContentAlignment="Center" />
             <Button Content="New Game"
                     IsEnabled="{Binding StartEnabled, UpdateSourceTrigger=PropertyChanged}"
